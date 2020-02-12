@@ -89,7 +89,7 @@ to US-setup
     setxy init-posx + 20 -15
     set init-posx init-posx + 150
     set heading 90
-    set size 40
+    set size 70
     set side 1
     set energy infantry-US-energy * 15
     set hit infantry-US-hit
@@ -148,14 +148,14 @@ to GE-setup
 
   ; GE Canons
   set init-posx 100
-  set-default-shape artilleries "tank"
+  set-default-shape artilleries "canon"
   create-artilleries 3
   ask artilleries with [(side = 0)] [
     set color red
     setxy init-posx -350
     set init-posx init-posx + 150
     set heading 0
-    set size 40
+    set size 50
     set side 0
     set energy infantry-GE-energy * 35
     set hit infantry-GE-hit
@@ -431,7 +431,7 @@ infantry-US-energy
 infantry-US-energy
 1
 100
-53.0
+50.0
 1
 1
 NIL
@@ -591,6 +591,20 @@ Polygon -16777216 true false 150 255 135 225 120 150 135 120 150 105 165 120 180
 Circle -16777216 true false 135 90 30
 Line -16777216 false 150 105 195 60
 Line -16777216 false 150 105 105 60
+
+canon
+true
+0
+Polygon -7500403 true true 75 270 45 120 270 120 240 270 90 270
+Rectangle -7500403 true true 135 15 180 150
+Line -16777216 false 75 270 45 120
+Line -16777216 false 45 120 135 120
+Line -16777216 false 135 120 135 15
+Line -16777216 false 135 15 180 15
+Line -16777216 false 180 15 180 120
+Line -16777216 false 180 120 270 120
+Line -16777216 false 270 120 240 270
+Line -16777216 false 240 270 75 270
 
 car
 false

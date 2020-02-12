@@ -5,11 +5,13 @@ breed [infantries infantry]
 breed [artilleries artillery]
 
 turtles-own [
-  side          ; 0 for Germans 1 for Allies
-  energy        ; energy left
-  hit           ; probability to hit
-  damage        ; impact on target's energy
-  frange        ; fire range
+  side              ; 0 for Germans 1 for Allies
+  energy            ; energy left
+  hit               ; probability to hit
+    frange          ; fire range
+  infantry-damage   ; impact on enemy infantry
+  tank-damage       ; impact on enemy tank
+  artillery-damage  ; impact on enemy artillery
 ]
 
 globals [ init-posx ]
@@ -51,8 +53,11 @@ to US-setup
     set side 1
     set energy infantry-US-energy
     set hit infantry-US-hit
-    set damage 1
     set frange infantry-US-frange
+    ; Damage table
+    set infantry-damage 5
+    set tank-damage 2
+    set artillery-damage 1
 	]
 
   ; US Tanks
@@ -68,8 +73,11 @@ to US-setup
     set side 1
     set energy infantry-US-energy * 25
     set hit infantry-US-hit
-    set damage 2
     set frange infantry-US-frange * 8
+    ; Damage table
+    set infantry-damage 10
+    set tank-damage 5
+    set artillery-damage 2
   ]
 
   ; US Artillery
@@ -86,8 +94,11 @@ to US-setup
     set side 1
     set energy infantry-US-energy * 15
     set hit infantry-US-hit
-    set damage 5
     set frange infantry-US-frange * 16
+    ; Damage table
+    set infantry-damage 20
+    set tank-damage 10
+    set artillery-damage 5
   ]
 
 end
@@ -109,8 +120,11 @@ to GE-setup
     set side 0
     set energy infantry-GE-energy
     set hit infantry-GE-hit
-    set damage 0.5
     set frange infantry-GE-frange
+    ; Damage table
+    set infantry-damage 5
+    set tank-damage 2
+    set artillery-damage 1
 	]
 
   ; GE Tanks
@@ -126,8 +140,11 @@ to GE-setup
     set side 0
     set energy infantry-GE-energy * 15
     set hit infantry-GE-hit
-    set damage 1
     set frange infantry-GE-frange * 8
+    ; Damage table
+    set infantry-damage 10
+    set tank-damage 5
+    set artillery-damage 2
   ]
 
   ; GE Canons
@@ -143,8 +160,11 @@ to GE-setup
     set side 0
     set energy infantry-GE-energy * 35
     set hit infantry-GE-hit
-    set damage 5
     set frange infantry-GE-frange * 16
+    ; Damage table
+    set infantry-damage 20
+    set tank-damage 10
+    set artillery-damage 5
   ]
 
 
@@ -193,35 +213,71 @@ to US-move
 end
 
 to fight
-  ; Every agent fires
-  ask infantries [ ; shooter (myself)
-    ask other infantries with [(side = 1 - [side] of myself)] [ ; enemy target
-
-      ; If the target is at fire range of the shooter,
-      ; then it fires with its probability to hit and the
-      ; damage it can make.
+  ; Infantry
+  ask infantries [
+    ; Target infantry
+    ask other infantries with [(side = 1 - [side] of myself)] [
       if distance myself <= [frange] of myself [
-        if random 1 < hit [ set energy energy - [damage] of myself ]
+        if random 1 < hit [ set energy energy - [infantry-damage] of myself ]
+      ]
+    ]
+    ; Target tanks
+    ask tanks with [(side = 1 - [side] of myself)] [
+      if distance myself <= [frange] of myself [
+        if random 1 < hit [ set energy energy - [tank-damage] of myself ]
+      ]
+    ]
+    ; Target artillery
+    ask artilleries with [(side = 1 - [side] of myself)] [
+      if distance myself <= [frange] of myself [
+        if random 1 < hit [ set energy energy - [artillery-damage] of myself ]
       ]
     ]
   ]
 
+  ; Tanks
   ask tanks [
-    ask turtles with [(side = 1 - [side] of myself)] [
+    ; Target infantry
+    ask infantries with [(side = 1 - [side] of myself)] [
       if distance myself <= [frange] of myself [
-        if random 1 < hit [ set energy energy - [damage] of myself ]
+        if random 1 < hit [ set energy energy - [infantry-damage] of myself ]
+      ]
+    ]
+    ; Target tanks
+    ask other tanks with [(side = 1 - [side] of myself)] [
+      if distance myself <= [frange] of myself [
+        if random 1 < hit [ set energy energy - [tank-damage] of myself ]
+      ]
+    ]
+    ; Target artillery
+    ask artilleries with [(side = 1 - [side] of myself)] [
+      if distance myself <= [frange] of myself [
+        if random 1 < hit [ set energy energy - [artillery-damage] of myself ]
       ]
     ]
   ]
 
+  ; Artillery
   ask artilleries [
-    ask turtles with [(side = 1 - [side] of myself)] [
+    ; Target infantry
+    ask infantries with [(side = 1 - [side] of myself)] [
       if distance myself <= [frange] of myself [
-        if random 1 < hit [ set energy energy - [damage] of myself ]
+        if random 1 < hit [ set energy energy - [infantry-damage] of myself ]
+      ]
+    ]
+    ; Target tanks
+    ask tanks with [(side = 1 - [side] of myself)] [
+      if distance myself <= [frange] of myself [
+        if random 1 < hit [ set energy energy - [tank-damage] of myself ]
+      ]
+    ]
+    ; Target artillery
+    ask other artilleries with [(side = 1 - [side] of myself)] [
+      if distance myself <= [frange] of myself [
+        if random 1 < hit [ set energy energy - [artillery-damage] of myself ]
       ]
     ]
   ]
-
 
   ; Every agent with zero or negative energy dies
   ask turtles [ if energy < 1 [ die ] ]
@@ -236,7 +292,6 @@ to movie
   ]
   vid:save-recording "Normandy.mp4"
 end
-
 
 
 
@@ -310,9 +365,9 @@ PLOT
 10
 380
 183
-Infantry left
+Troops left
 Time
-Infantry count
+Troop count
 0.0
 10.0
 0.0
@@ -321,8 +376,8 @@ true
 true
 "" ""
 PENS
-"US infantry" 1.0 0 -13791810 true "" "plot count infantries with [side = 1]"
-"GE infantry" 1.0 0 -2674135 true "" "plot count infantries with [side = 0]"
+"US troops" 1.0 0 -13791810 true "" "plot count turtles with [side = 1]"
+"GE troops" 1.0 0 -2674135 true "" "plot count turtles with [side = 0]"
 
 SLIDER
 23

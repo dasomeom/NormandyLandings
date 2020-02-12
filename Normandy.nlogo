@@ -42,8 +42,8 @@ to US-setup
 
   ; US Infantry
   set init-posx 100
-  create-infantries 10
 	set-default-shape infantries "person soldier"
+  create-infantries 10
 	ask infantries [
     set color blue
     setxy init-posx -50
@@ -62,8 +62,8 @@ to US-setup
 
   ; US Tanks
   set init-posx 100
-  create-tanks 3
   set-default-shape tanks "tank"
+  create-tanks 3
   ask tanks [
     set color blue
     setxy init-posx - 20 -50
@@ -82,9 +82,8 @@ to US-setup
 
   ; US Artillery
   set init-posx 100
-  set init-posx 100
+  set-default-shape artilleries "boat top"
   create-artilleries 3
-  set-default-shape artilleries "tank"
   ask artilleries[
     set color blue
     setxy init-posx + 20 -15
@@ -109,8 +108,8 @@ to GE-setup
 
   ; GE Infantry
   set init-posx 100
-  create-infantries 5
 	set-default-shape infantries "person soldier"
+  create-infantries 5
 	ask infantries with [(side = 0)] [
     set color red
     setxy init-posx -250
@@ -129,8 +128,8 @@ to GE-setup
 
   ; GE Tanks
   set init-posx 100
-  create-tanks 3
   set-default-shape tanks "tank"
+  create-tanks 3
   ask tanks with [(side = 0)] [
     set color red
     setxy init-posx - 10 -300
@@ -149,8 +148,8 @@ to GE-setup
 
   ; GE Canons
   set init-posx 100
+  set-default-shape artilleries "tank"
   create-artilleries 3
-  set-default-shape artilleries "boat top"
   ask artilleries with [(side = 0)] [
     set color red
     setxy init-posx -350
@@ -166,7 +165,6 @@ to GE-setup
     set tank-damage 10
     set artillery-damage 5
   ]
-
 
 end
 

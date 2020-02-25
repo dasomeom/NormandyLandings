@@ -1,213 +1,90 @@
-extensions [vid]
+extensions [vid nw]
 
 breed [tanks tank]
 breed [infantries infantry]
 breed [artilleries artillery]
+breed [bunkers bunker]
+breed [targets target]
 
 turtles-own [
   side              ; 0 for Germans 1 for Allies
   energy            ; energy left
   hit               ; probability to hit
-    frange          ; fire range
+  frange            ; fire range
   infantry-damage   ; impact on enemy infantry
   tank-damage       ; impact on enemy tank
   artillery-damage  ; impact on enemy artillery
 ]
 
-globals [ init-posx ]
+globals [
+  turtlecount       ; indices of turtles
+  warships-size
+  bunkers-size
+  infantry-size
+  targets-size
+  DOG-target-id-first
+  DOG-target-id-second
+]
+
+to init-variables
+  set turtlecount 0
+  set warships-size 25
+  set bunkers-size 10
+  set infantry-size 8
+  set targets-size 10
+end
 
 to setup
   random-seed 1994
   clear-all
   reset-ticks
-  import-pcolors "bg/real_map.jpg"
+  import-pcolors "bg/realistic_clean.jpg"
+  init-variables
   setup-turtles
 end
 
 to go
   if ticks >= 500 [ stop ]
 	US-move
-  fight
+  ;fight
   tick
 end
 
-to setup-turtles
-  US-setup
-  GE-setup
-end
 
-to US-setup
-  ; TODO US Warships
-  ; TODO US Tanks
-
-  ; US Infantry
-  set init-posx 100
-	set-default-shape infantries "person soldier"
-  create-infantries 10
-	ask infantries [
-    set color blue
-    setxy init-posx -50
-    set init-posx init-posx + 30
-    set heading 180
-    set size 20
-    set side 1
-    set energy infantry-US-energy
-    set hit infantry-US-hit
-    set frange infantry-US-frange
-    ; Damage table
-    set infantry-damage 5
-    set tank-damage 2
-    set artillery-damage 1
-	]
-
-  ; US Tanks
-  set init-posx 100
-  set-default-shape tanks "tank"
-  create-tanks 3
-  ask tanks [
-    set color blue
-    setxy init-posx - 20 -50
-    set init-posx init-posx + 150
-    set heading 180
-    set size 30
-    set side 1
-    set energy infantry-US-energy * 25
-    set hit infantry-US-hit
-    set frange infantry-US-frange * 8
-    ; Damage table
-    set infantry-damage 10
-    set tank-damage 5
-    set artillery-damage 2
-  ]
-
-  ; US Artillery
-  set init-posx 100
-  set-default-shape artilleries "boat top"
-  create-artilleries 3
-  ask artilleries[
-    set color blue
-    setxy init-posx + 20 -15
-    set init-posx init-posx + 150
-    set heading 90
-    set size 70
-    set side 1
-    set energy infantry-US-energy * 15
-    set hit infantry-US-hit
-    set frange infantry-US-frange * 16
-    ; Damage table
-    set infantry-damage 20
-    set tank-damage 10
-    set artillery-damage 5
-  ]
-
-end
-
-to GE-setup
-  ; TODO GE canons
-  ; TODO GE Tanks
-
-  ; GE Infantry
-  set init-posx 100
-	set-default-shape infantries "person soldier"
-  create-infantries 5
-	ask infantries with [(side = 0)] [
-    set color red
-    setxy init-posx -250
-    set init-posx init-posx + 80
-    set heading 0
-    set size 20
-    set side 0
-    set energy infantry-GE-energy
-    set hit infantry-GE-hit
-    set frange infantry-GE-frange
-    ; Damage table
-    set infantry-damage 5
-    set tank-damage 2
-    set artillery-damage 1
-	]
-
-  ; GE Tanks
-  set init-posx 100
-  set-default-shape tanks "tank"
-  create-tanks 3
-  ask tanks with [(side = 0)] [
-    set color red
-    setxy init-posx - 10 -300
-    set init-posx init-posx + 150
-    set heading 0
-    set size 30
-    set side 0
-    set energy infantry-GE-energy * 15
-    set hit infantry-GE-hit
-    set frange infantry-GE-frange * 8
-    ; Damage table
-    set infantry-damage 10
-    set tank-damage 5
-    set artillery-damage 2
-  ]
-
-  ; GE Canons
-  set init-posx 100
-  set-default-shape artilleries "canon"
-  create-artilleries 3
-  ask artilleries with [(side = 0)] [
-    set color red
-    setxy init-posx -350
-    set init-posx init-posx + 150
-    set heading 0
-    set size 50
-    set side 0
-    set energy infantry-GE-energy * 35
-    set hit infantry-GE-hit
-    set frange infantry-GE-frange * 16
-    ; Damage table
-    set infantry-damage 20
-    set tank-damage 10
-    set artillery-damage 5
-  ]
-
-end
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; MOVES AND FIGHTS
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 to US-move
-  ; pcolor 38.7 is shore
-  ; pcolor 88.4 is ocean
-  ; pcolor 29.5 is beach
+  ;ask turtle 0 [ create-link-with turtle 1 ]
 
   ; US infantry move
   ask infantries with [(side = 1)] [
-    ; if US troop is still above the shore, move
-    if ycor > -275 [
-      ; if in ocean, go fast
-      if pcolor = 88.4
-        [ forward 0.6 ]
-      ; if on the beach, go slow
-      if pcolor = 29.5
-        [ forward 0.2 ]
-      ; if on the shore, go normal
-      ; otherwise, in transition between two grounds, go slow
-      ifelse pcolor = 38.7
-        [ forward 0.4 ]
-        [ forward 0.2 ]
+
+    ; Don't move if can fire at enemy
+    ; Check for enemies under fire range
+    let can-fire 0
+    ask turtles in-radius frange [
+      if [side] of self - [side] of myself = -1 [ set can-fire 1 ]
     ]
+
+    ifelse can-fire = 0 [
+      ; Don't fire and move to target checkpoint
+      ifelse ycor > [ycor] of turtle DOG-target-id-first [
+        set heading towards turtle DOG-target-id-first + random 50 * one-of [1 -1]
+        forward 1
+      ][
+        set heading towards turtle DOG-target-id-second
+        forward 1
+      ]
+    ][
+      ; Don't move and will fire at enemy
+    ]
+
   ]
 
-  ;US tanks move
-  ask tanks with [(side = 1)] [
-    ; if US troop is still above the shore, move
-    if ycor > -275 [
-      ; if in ocean, go slow
-      if pcolor = 88.4
-        [ forward 0.2 ]
-      ; if on the beach, go normal
-      if pcolor = 29.5
-        [ forward 0.4 ]
-      ; if on the shore, go fast
-      ; otherwise, in transition between two grounds, go slow
-      ifelse pcolor = 38.7
-        [ forward 0.6 ]
-        [ forward 0.4 ]
-    ]
-  ]
 end
 
 to fight
@@ -281,6 +158,208 @@ to fight
   ask turtles [ if energy < 1 [ die ] ]
 end
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; AGENTS AND THEIR INITIAL POSITIONS, PROPERTIES
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+to setup-turtles
+  US-setup
+  GE-setup
+end
+
+to US-setup
+  ; US Warships
+  set-default-shape artilleries "boat top"
+
+  ; DOG
+  create-artilleries 1
+  ask artillery turtlecount [
+    set color blue
+    setxy 110 -20
+    set heading 90
+    set size warships-size
+    set side 1
+  ]
+  set turtlecount turtlecount + 1
+  create-artilleries 1
+  ask artillery turtlecount [
+    set color blue
+    setxy 180 -20
+    set heading 90
+    set size warships-size
+    set side 1
+  ]
+  set turtlecount turtlecount + 1
+
+  create-artilleries 1
+  ask artillery turtlecount [
+    set color blue
+    setxy 250 -20
+    set heading 90
+    set size warships-size
+    set side 1
+  ]
+  set turtlecount turtlecount + 1
+
+  ; DOG land targets 1 and 2
+  set-default-shape targets "x"
+  create-targets 1
+  ask target turtlecount [
+    set color green
+    setxy 93 -233
+    set heading 90
+    set size targets-size
+    set side 1
+  ]
+  set DOG-target-id-first turtlecount
+  set turtlecount turtlecount + 1
+
+  create-targets 1
+  ask target turtlecount [
+    set color green
+    setxy 103 -270
+    set heading 90
+    set size targets-size
+    set side 1
+  ]
+  set DOG-target-id-second turtlecount
+  set turtlecount turtlecount + 1
+
+  ; US Infantry from DOG
+	set-default-shape infantries "person soldier"
+  let number 1
+  create-infantries number
+	ask infantries [
+    set color blue
+    setxy 180 -30 + random 10
+    set heading 180
+    set size infantry-size
+    set side 1
+    ; Infantry properties
+    set frange infantry-US-frange
+	]
+  set turtlecount turtlecount + number
+
+  ; EASY
+  create-artilleries 1
+  ask artillery turtlecount [
+    set color blue
+    setxy 370 -20
+    set heading 90
+    set size warships-size
+    set side 1
+  ]
+  set turtlecount turtlecount + 1
+
+  ; FOX
+  create-artilleries 1
+  ask artillery turtlecount [
+    set color blue
+    setxy 480 -20
+    set heading 90
+    set size warships-size
+    set side 1
+  ]
+  set turtlecount turtlecount + 1
+
+end
+
+to GE-setup
+  ; Bunkers
+  set-default-shape bunkers "square"
+
+  ; Vierville
+  create-bunkers 1
+  ask bunker turtlecount [
+    set color red
+    setxy 80 -229
+    set heading 90
+    set size bunkers-size
+    set side 0
+  ]
+  set turtlecount turtlecount + 1
+  create-bunkers 1
+  ask bunker turtlecount [
+    set color red
+    setxy 105 -235
+    set heading 90
+    set size bunkers-size
+    set side 0
+  ]
+  set turtlecount turtlecount + 1
+
+  ; Les moulins
+  create-bunkers 1
+  ask bunker turtlecount [
+    set color red
+    setxy 229 -250
+    set heading 90
+    set size bunkers-size
+    set side 0
+  ]
+  set turtlecount turtlecount + 1
+  create-bunkers 1
+  ask bunker turtlecount [
+    set color red
+    setxy 250 -250
+    set heading 90
+    set size bunkers-size
+    set side 0
+  ]
+  set turtlecount turtlecount + 1
+
+  ; Saint Laurent
+  create-bunkers 1
+  ask bunker turtlecount [
+    set color red
+    setxy 328 -250
+    set heading 90
+    set size bunkers-size
+    set side 0
+  ]
+  set turtlecount turtlecount + 1
+  create-bunkers 1
+  ask bunker turtlecount [
+    set color red
+    setxy 348 -250
+    set heading 90
+    set size bunkers-size
+    set side 0
+  ]
+  set turtlecount turtlecount + 1
+
+  ; Colleville
+  create-bunkers 1
+  ask bunker turtlecount [
+    set color red
+    setxy 430 -248
+    set heading 90
+    set size bunkers-size
+    set side 0
+  ]
+  set turtlecount turtlecount + 1
+  create-bunkers 1
+  ask bunker turtlecount [
+    set color red
+    setxy 483 -240
+    set heading 90
+    set size bunkers-size
+    set side 0
+  ]
+  set turtlecount turtlecount + 1
+
+end
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; MISCELLANEOUS
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 to movie
   vid:start-recorder
   vid:record-view ;; show the initial state
@@ -292,19 +371,15 @@ to movie
 end
 
 
-
-
-
-
 @#$#@#$#@
 GRAPHICS-WINDOW
-558
-19
-1217
-529
+421
+15
+1409
+549
 -1
 -1
-1.3
+1.4
 1
 10
 1
@@ -315,8 +390,8 @@ GRAPHICS-WINDOW
 0
 1
 0
-500
--385
+700
+-375
 0
 1
 1
@@ -401,7 +476,7 @@ infantry-GE-frange
 infantry-GE-frange
 1
 50
-9.0
+49.0
 1
 1
 NIL
@@ -461,7 +536,7 @@ infantry-US-frange
 infantry-US-frange
 1
 50
-7.0
+15.0
 1
 1
 NIL

@@ -30,6 +30,7 @@ globals [
   infantry-size
   targets-size
   artillery-size
+  tank-size
 
   ; US Infantries
   ;; Properties
@@ -72,6 +73,17 @@ globals [
   artillery-GE-infantry-damage
   artillery-GE-tank-damage
   artillery-GE-artillery-damage
+
+  ; GE Tanks
+  ;; Properties
+  tank-GE-energy
+  tank-GE-hit
+  tank-GE-frange
+  ;; Damage table
+  tank-GE-infantry-damage
+  tank-GE-tank-damage
+  tank-GE-artillery-damage
+
 ]
 
 to init-variables
@@ -83,6 +95,7 @@ to init-variables
   set bunkers-size 10
   set targets-size 10
   set artillery-size 13
+  set tank-size 20
 
   ; US Infantries
   ;; Properties
@@ -125,6 +138,16 @@ to init-variables
   set artillery-GE-infantry-damage 20
   set artillery-GE-tank-damage 10
   set artillery-GE-artillery-damage 5
+
+  ; GE Tanks
+  ;; Properties
+  set tank-GE-energy infantry-GE-energy * 50
+  set tank-GE-hit infantry-GE-hit
+  set tank-GE-frange infantry-GE-frange * 10
+  ;; Damage table
+  set tank-GE-infantry-damage 30
+  set tank-GE-tank-damage 15
+  set tank-GE-artillery-damage 10
 end
 
 to setup
@@ -138,8 +161,10 @@ end
 
 to go
   clear-links
-  if ticks >= 500 [ stop ]
+  if ticks >= 700 [ stop ]
+  if ticks = Tank-Delay [ GE-setup-tank ]
 	US-move
+  GE-move
   fight
   tick
 end
@@ -180,6 +205,38 @@ to US-move
 
 end
 
+to GE-move
+
+  ; GE tanks move
+  ask tanks with [(side = 0)] [
+
+    ; Don't move if can fire at enemy
+    ; Check for enemies under fire range
+    let can-fire 0
+    if ycor >= [ycor] of self-target-id-first [
+        set can-fire 1
+     ]
+    ask turtles in-radius frange [
+      if [side] of self - [side] of myself = -1 [ set can-fire 1 ]
+    ]
+
+    ifelse can-fire = 0 [
+      ; Don't fire and move to target checkpoint
+      ifelse ycor < [ycor] of self-target-id-second [
+        set heading towards self-target-id-second + random 10 * one-of [1 -1]
+        forward 1
+      ][
+        set heading towards self-target-id-first
+        forward 1
+      ]
+    ][
+      ; Don't move and will fire at enemy
+    ]
+
+  ]
+
+end
+
 to fight
   ; Infantry
   ask infantries [
@@ -207,6 +264,19 @@ to fight
 
   ; Artillery
   ask artilleries [
+    ; Target infantry
+    ask infantries with [(side = 1 - [side] of myself)] [
+      ifelse distance myself <= [frange] of myself [
+        if random 1 < hit [
+          create-link-to myself
+          set energy energy - [infantry-damage] of myself ]
+      ][ ]
+    ]
+  ]
+
+
+  ; Tank
+  ask tanks [
     ; Target infantry
     ask infantries with [(side = 1 - [side] of myself)] [
       ifelse distance myself <= [frange] of myself [
@@ -614,6 +684,7 @@ end
 to GE-setup-bunkers
   ; Bunkers
   set-default-shape bunkers "square"
+  set-default-shape tanks "tank"
 
   ; Vierville
   create-bunkers 1
@@ -839,6 +910,99 @@ to GE-setup-artillery
   ]
 end
 
+to GE-setup-tank
+  ; GE artillery was located at XXX
+  set-default-shape tanks "tank"
+
+  create-tanks 1
+  ask tanks with [(side = 0) and (energy = 0)] [
+    set color red
+    setxy 70 -370
+    set heading 0
+    set size tank-size
+    set side 0
+    ; Properties
+    set energy tank-GE-energy
+    set hit tank-GE-hit
+    set frange tank-GE-frange
+    ; Damage table
+    set tank-damage tank-GE-infantry-damage
+    set tank-damage tank-GE-tank-damage
+    set tank-damage tank-GE-artillery-damage
+    ; Target
+    set self-target-id-second min-one-of targets [distance myself]
+    ;show [who] of self-target-id-second
+    set self-target-id-first target ([who] of self-target-id-second - 1)
+    ;show [who] of self-target-id-first
+  ]
+
+  create-tanks 1
+  ask tanks with [(side = 0) and (energy = 0)] [
+    set color red
+    setxy 220 -370
+    set heading 0
+    set size tank-size
+    set side 0
+    ; Properties
+    set energy tank-GE-energy
+    set hit tank-GE-hit
+    set frange tank-GE-frange
+    ; Damage table
+    set tank-damage tank-GE-infantry-damage
+    set tank-damage tank-GE-tank-damage
+    set tank-damage tank-GE-artillery-damage
+    ; Target
+    set self-target-id-second min-one-of targets [distance myself]
+    ;show [who] of self-target-id-second
+    set self-target-id-first target ([who] of self-target-id-second - 1)
+    ;show [who] of self-target-id-first
+  ]
+
+  create-tanks 1
+  ask tanks with [(side = 0) and (energy = 0)] [
+    set color red
+    setxy 350 -370
+    set heading 0
+    set size tank-size
+    set side 0
+    ; Properties
+    set energy tank-GE-energy
+    set hit tank-GE-hit
+    set frange tank-GE-frange
+    ; Damage table
+    set tank-damage tank-GE-infantry-damage
+    set tank-damage tank-GE-tank-damage
+    set tank-damage tank-GE-artillery-damage
+    ; Target
+    set self-target-id-second min-one-of targets [distance myself]
+    ;show [who] of self-target-id-second
+    set self-target-id-first target ([who] of self-target-id-second - 1)
+    ;show [who] of self-target-id-first
+  ]
+
+  create-tanks 1
+  ask tanks with [(side = 0) and (energy = 0)] [
+    set color red
+    setxy 500 -370
+    set heading 0
+    set size tank-size
+    set side 0
+    ; Properties
+    set energy tank-GE-energy
+    set hit tank-GE-hit
+    set frange tank-GE-frange
+    ; Damage table
+    set tank-damage tank-GE-infantry-damage
+    set tank-damage tank-GE-tank-damage
+    set tank-damage tank-GE-artillery-damage
+    ; Target
+    set self-target-id-second min-one-of targets [distance myself]
+    ;show [who] of self-target-id-second
+    set self-target-id-first target ([who] of self-target-id-second - 1)
+    ;show [who] of self-target-id-first
+  ]
+end
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MISCELLANEOUS
@@ -855,13 +1019,12 @@ to movie
   vid:save-recording "Normandy.mp4"
 end
 
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 421
 15
-1409
-549
+1410
+550
 -1
 -1
 1.4
@@ -1043,6 +1206,21 @@ NIL
 NIL
 NIL
 1
+
+SLIDER
+21
+518
+193
+551
+Tank-Delay
+Tank-Delay
+0
+700
+18.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?

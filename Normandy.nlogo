@@ -1,4 +1,4 @@
-extensions [vid nw]
+;extensions [vid nw]
 
 breed [tanks tank]
 breed [infantries infantry]
@@ -23,6 +23,11 @@ globals [
   turtlecount       ; indices of turtles
   target-id-first
   target-id-second
+  Dog-G-inf         ;infantry in dog green
+  Dog-W-inf
+  Dog-R-inf
+  Easy-inf
+  Fox-inf
 
   ; Sizes
   warships-size
@@ -84,6 +89,9 @@ globals [
   tank-GE-tank-damage
   tank-GE-artillery-damage
 
+
+  temp
+
 ]
 
 to init-variables
@@ -91,7 +99,7 @@ to init-variables
 
   ; Sizes
   set warships-size 25
-  set infantry-size 8
+  set infantry-size 2
   set bunkers-size 10
   set targets-size 10
   set artillery-size 13
@@ -132,12 +140,12 @@ to init-variables
   ; GE Artillery (canons)
   ;; Properties
   set artillery-GE-energy infantry-GE-energy * 35
-  set artillery-GE-hit infantry-GE-hit
-  set artillery-GE-frange infantry-GE-frange * 40
+  set artillery-GE-hit 0.1
+  set artillery-GE-frange infantry-GE-frange * 60
   ;; Damage table
-  set artillery-GE-infantry-damage 20
-  set artillery-GE-tank-damage 10
-  set artillery-GE-artillery-damage 5
+  set artillery-GE-infantry-damage 0.5
+  set artillery-GE-tank-damage 0.5
+  set artillery-GE-artillery-damage 0.5
 
   ; GE Tanks
   ;; Properties
@@ -163,6 +171,255 @@ to go
   clear-links
   if ticks >= 700 [ stop ]
   if ticks = Tank-Delay [ GE-setup-tank ]
+  ask bunkers [	
+    set label round energy	
+  ]	
+  ask tanks [	
+    set label round energy	
+  ]
+  if ticks = 1 [
+    set Dog-G-inf  24
+    set Dog-W-inf 12
+    set Dog-R-inf 12
+    set Easy-inf 48
+    set Fox-inf 48
+    US-New-Infantries
+
+  ]
+  if ticks = 3 [
+    set Dog-G-inf 38
+    set Dog-W-inf 30
+    set Dog-R-inf 30
+    set Easy-inf 100
+    set Fox-inf 20
+    US-New-Infantries
+
+  ]
+  if ticks = 8 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 30 ;red
+    set Fox-inf 10
+    US-New-Infantries
+
+  ]
+  if ticks = 25 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 40  ; red
+    set Fox-inf 20
+    US-New-Infantries
+
+  ]
+  if ticks = 30 [
+    set Dog-G-inf 34
+    set Dog-W-inf 10
+    set Dog-R-inf 16
+    set Easy-inf 36   ;10 green+ 26 red
+    set Fox-inf 38
+    US-New-Infantries
+
+  ]
+  if ticks = 40 [
+    set Dog-G-inf 38
+    set Dog-W-inf 12
+    set Dog-R-inf 18
+    set Easy-inf 32 ;10G + 22R
+    set Fox-inf 24
+    US-New-Infantries
+
+  ]
+  if ticks = 50 [
+    set Dog-G-inf 24
+    set Dog-W-inf 12
+    set Dog-R-inf 14
+    set Easy-inf 40 ;14G + 26R
+    set Fox-inf 16
+    US-New-Infantries
+
+  ]
+  if ticks = 57 [
+    set Dog-G-inf  8
+    set Dog-W-inf 0
+    set Dog-R-inf 18
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 60 [
+    set Dog-G-inf 20
+    set Dog-W-inf 2
+    set Dog-R-inf 2
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 65 [
+    set Dog-G-inf 28
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 30  ;R
+    set Fox-inf 26
+    US-New-Infantries
+
+  ]
+  if ticks = 70 [
+    set Dog-G-inf  42
+    set Dog-W-inf 20
+    set Dog-R-inf 20
+    set Easy-inf 44  ;20G + 24R
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 80 [
+    set Dog-G-inf  0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 24 ;R
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 90 [
+    set Dog-G-inf  0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 18 ;R
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 95 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 12 ;R
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 100 [
+    set Dog-G-inf 0
+    set Dog-W-inf 20
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 105 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 20 ;R
+    set Fox-inf 3
+    US-New-Infantries
+
+  ]
+  if ticks = 110 [
+    set Dog-G-inf 10
+    set Dog-W-inf 0
+    set Dog-R-inf 7
+    set Easy-inf 43  ; 13G + 30R
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 120 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 44 ;R
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 130 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 135 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 8
+    US-New-Infantries
+
+  ]
+  if ticks = 150 [
+    set Dog-G-inf 0
+    set Dog-W-inf 20
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 180 [
+    set Dog-G-inf 0
+    set Dog-W-inf 30
+    set Dog-R-inf 0
+    set Easy-inf 32 ; 18R + 4R+ 1 Rhino???
+    set Fox-inf 0  ;2 Rhino??
+    US-New-Infantries
+
+  ]
+  if ticks = 185 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 20 ;R
+    set Fox-inf 10
+    US-New-Infantries
+
+  ]
+  if ticks = 195 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 76 ;R
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 210 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 180 ;R
+    set Fox-inf 0
+    US-New-Infantries
+
+  ]
+  if ticks = 220 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+  ]
+  if ticks = 225 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+  ]
+
+
 	US-move
   GE-move
   fight
@@ -190,11 +447,11 @@ to US-move
 
     ifelse can-fire = 0 [
       ; Don't fire and move to target checkpoint
-      ifelse ycor > [ycor] of turtle self-target-id-first [
-        set heading towards turtle self-target-id-first + random 50 * one-of [1 -1]
+      ifelse ycor > [ycor] of self-target-id-first [
+        set heading towards self-target-id-first + random 50 * one-of [1 -1]
         forward 1
       ][
-        set heading towards turtle self-target-id-second
+        set heading towards self-target-id-second
         forward 1
       ]
     ][
@@ -222,11 +479,10 @@ to GE-move
 
     ifelse can-fire = 0 [
       ; Don't fire and move to target checkpoint
-      if ycor < [ycor] of self-target-id-second [
+      ifelse ycor < [ycor] of self-target-id-second [
         set heading towards self-target-id-second + random 10 * one-of [1 -1]
         forward 1
-      ]
-      if (ycor >= [ycor] of self-target-id-second)  and (ycor + 20 < [ycor] of self-target-id-first) [
+      ][
         set heading towards self-target-id-first
         forward 1
       ]
@@ -234,12 +490,12 @@ to GE-move
       ; Don't move and will fire at enemy
     ]
 
-
   ]
 
 end
 
 to fight
+
   ; Infantry
   ask infantries [
     ; Target bunkers
@@ -267,20 +523,22 @@ to fight
   ; Artillery
   ask artilleries [
     ; Target infantry
-    ask infantries with [(side = 1 - [side] of myself)] [
-      ifelse distance myself <= [frange] of myself [
-        if random 1 < hit [
+    ask up-to-n-of 10 infantries with [(side = 1 - [side] of myself)] [
+      if distance myself <= random [frange] of myself [
+        if random 1 < [hit] of myself [
+          if remainder ticks 10 > 5 [
           create-link-to myself
           set energy energy - [infantry-damage] of myself ]
-      ][ ]
+    ]
     ]
   ]
 
+  ]
 
   ; Tank
   ask tanks [
     ; Target infantry
-    ask infantries with [(side = 1 - [side] of myself)] [
+    ask  infantries with [(side = 1 - [side] of myself)] [
       ifelse distance myself <= [frange] of myself [
         if random 1 < hit [
           create-link-to myself
@@ -371,29 +629,29 @@ to US-setup-DOG
 
   ; US Infantry from DOG
   ; Leave from Warship 1
-  set number 30
-  create-infantries number
-	ask infantries with [energy = 0] [
-    set color blue
-    setxy 110 -30 + random 10
-    set heading 180
-    set size infantry-size
-    set side 1
-    ; Properties
-    set energy infantry-US-energy
-    set frange infantry-US-frange
-    set hit infantry-US-hit
-    set frange infantry-US-frange
-    ; Damage table
-    set infantry-damage infantry-US-infantry-damage
-    set tank-damage infantry-US-tank-damage
-    set artillery-damage infantry-US-artillery-damage
-    set bunker-damage infantry-US-bunker-damage
-    ; Targets
-    set self-target-id-first target-id-first
-    set self-target-id-second target-id-second
-	]
-  set turtlecount turtlecount + number
+;  set number 30
+;  create-infantries number
+;	ask infantries with [energy = 0] [
+;    set color blue
+;    setxy 110 -30 + random 10
+;    set heading 180
+;    set size infantry-size
+;    set side 1
+;    ; Properties
+;    set energy infantry-US-energy
+;    set frange infantry-US-frange
+;    set hit infantry-US-hit
+;    set frange infantry-US-frange
+;    ; Damage table
+;    set infantry-damage infantry-US-infantry-damage
+;    set tank-damage infantry-US-tank-damage
+;    set artillery-damage infantry-US-artillery-damage
+;    set bunker-damage infantry-US-bunker-damage
+;    ; Targets
+;    set self-target-id-first target-id-first
+;    set self-target-id-second target-id-second
+;	]
+;  set turtlecount turtlecount + number
 
   ; Warship 2
   create-artilleries 1
@@ -445,29 +703,29 @@ to US-setup-DOG
 
   ; US Infantry from DOG
   ; Leave from Warship 2
-  set number 30
-  create-infantries number
-  ask infantries with [energy = 0] [
-    set color blue
-    setxy 180 -30 + random 10
-    set heading 180
-    set size infantry-size
-    set side 1
-    ; Properties
-    set energy infantry-US-energy
-    set frange infantry-US-frange
-    set hit infantry-US-hit
-    set frange infantry-US-frange
-    ; Damage table
-    set infantry-damage infantry-US-infantry-damage
-    set tank-damage infantry-US-tank-damage
-    set artillery-damage infantry-US-artillery-damage
-    set bunker-damage infantry-US-bunker-damage
-    ; Targets
-    set self-target-id-first target-id-first
-    set self-target-id-second target-id-second
-	]
-  set turtlecount turtlecount + number
+;  set number 30
+;  create-infantries number
+;  ask infantries with [energy = 0] [
+;    set color blue
+;    setxy 180 -30 + random 10
+;    set heading 180
+;    set size infantry-size
+;    set side 1
+;    ; Properties
+;    set energy infantry-US-energy
+;    set frange infantry-US-frange
+;    set hit infantry-US-hit
+;    set frange infantry-US-frange
+;    ; Damage table
+;    set infantry-damage infantry-US-infantry-damage
+;    set tank-damage infantry-US-tank-damage
+;    set artillery-damage infantry-US-artillery-damage
+;    set bunker-damage infantry-US-bunker-damage
+;    ; Targets
+;    set self-target-id-first target-id-first
+;    set self-target-id-second target-id-second
+;	]
+;  set turtlecount turtlecount + number
 
   ; Warship 3
   create-artilleries 1
@@ -491,29 +749,29 @@ to US-setup-DOG
 
   ; US Infantry from DOG
   ; Leave from Warship 3
-  set number 30
-  create-infantries number
-  ask infantries with [energy = 0] [
-    set color blue
-    setxy 250 -30 + random 10
-    set heading 180
-    set size infantry-size
-    set side 1
-    ; Properties
-    set energy infantry-US-energy
-    set frange infantry-US-frange
-    set hit infantry-US-hit
-    set frange infantry-US-frange
-    ; Damage table
-    set infantry-damage infantry-US-infantry-damage
-    set tank-damage infantry-US-tank-damage
-    set artillery-damage infantry-US-artillery-damage
-    set bunker-damage infantry-US-bunker-damage
-    ; Targets
-    set self-target-id-first target-id-first
-    set self-target-id-second target-id-second
-	]
-  set turtlecount turtlecount + number
+;  set number 30
+;  create-infantries number
+;  ask infantries with [energy = 0] [
+;    set color blue
+;    setxy 250 -30 + random 10
+;    set heading 180
+;    set size infantry-size
+;    set side 1
+;    ; Properties
+;    set energy infantry-US-energy
+;    set frange infantry-US-frange
+;    set hit infantry-US-hit
+;    set frange infantry-US-frange
+;    ; Damage table
+;    set infantry-damage infantry-US-infantry-damage
+;    set tank-damage infantry-US-tank-damage
+;    set artillery-damage infantry-US-artillery-damage
+;    set bunker-damage infantry-US-bunker-damage
+;    ; Targets
+;    set self-target-id-first target-id-first
+;    set self-target-id-second target-id-second
+;	]
+;  set turtlecount turtlecount + number
 
 end
 
@@ -570,29 +828,29 @@ to US-setup-EASY
 
   ; US Infantry from EASY
   ; Leave from Warship 1
-  set number 30
-  create-infantries number
-  ask infantries with [energy = 0] [
-    set color blue
-    setxy 370 -30 + random 10
-    set heading 180
-    set size infantry-size
-    set side 1
-    ; Properties
-    set energy infantry-US-energy
-    set frange infantry-US-frange
-    set hit infantry-US-hit
-    set frange infantry-US-frange
-    ; Damage table
-    set infantry-damage infantry-US-infantry-damage
-    set tank-damage infantry-US-tank-damage
-    set artillery-damage infantry-US-artillery-damage
-    set bunker-damage infantry-US-bunker-damage
-    ; Targets
-    set self-target-id-first target-id-first
-    set self-target-id-second target-id-second
-	]
-  set turtlecount turtlecount + number
+;  set number 30
+;  create-infantries number
+;  ask infantries with [energy = 0] [
+;    set color blue
+;    setxy 370 -30 + random 10
+;    set heading 180
+;    set size infantry-size
+;    set side 1
+;    ; Properties
+;    set energy infantry-US-energy
+;    set frange infantry-US-frange
+;    set hit infantry-US-hit
+;    set frange infantry-US-frange
+;    ; Damage table
+;    set infantry-damage infantry-US-infantry-damage
+;    set tank-damage infantry-US-tank-damage
+;    set artillery-damage infantry-US-artillery-damage
+;    set bunker-damage infantry-US-bunker-damage
+;    ; Targets
+;    set self-target-id-first target-id-first
+;    set self-target-id-second target-id-second
+;	]
+;  set turtlecount turtlecount + number
 
 end
 
@@ -649,29 +907,29 @@ to US-setup-FOX
 
   ; US Infantry from FOX
   ; Leave from Warship 1
-  set number 30
-  create-infantries number
-  ask infantries with [energy = 0] [
-    set color blue
-    setxy 480 -30 + random 10
-    set heading 180
-    set size infantry-size
-    set side 1
-    ; Properties
-    set energy infantry-US-energy
-    set frange infantry-US-frange
-    set hit infantry-US-hit
-    set frange infantry-US-frange
-    ; Damage table
-    set infantry-damage infantry-US-infantry-damage
-    set tank-damage infantry-US-tank-damage
-    set artillery-damage infantry-US-artillery-damage
-    set bunker-damage infantry-US-bunker-damage
-    ; Targets
-    set self-target-id-first target-id-first
-    set self-target-id-second target-id-second
-	]
-  set turtlecount turtlecount + number
+;  set number 30
+;  create-infantries number
+;  ask infantries with [energy = 0] [
+;    set color blue
+;    setxy 480 -30 + random 10
+;    set heading 180
+;    set size infantry-size
+;    set side 1
+;    ; Properties
+;    set energy infantry-US-energy
+;    set frange infantry-US-frange
+;    set hit infantry-US-hit
+;    set frange infantry-US-frange
+;    ; Damage table
+;    set infantry-damage infantry-US-infantry-damage
+;    set tank-damage infantry-US-tank-damage
+;    set artillery-damage infantry-US-artillery-damage
+;    set bunker-damage infantry-US-bunker-damage
+;    ; Targets
+;    set self-target-id-first target-id-first
+;    set self-target-id-second target-id-second
+;	]
+;  set turtlecount turtlecount + number
 end
 
 ;;;;;;;;;;;;;;;;;;
@@ -1005,21 +1263,149 @@ to GE-setup-tank
   ]
 end
 
+to US-DOG-Green-Infantries
+  create-infantries Dog-G-inf
+	ask infantries with [energy = 0] [
+    set color blue
+    setxy 130 -30 + random 10
+    set heading 180
+    set size infantry-size
+    set side 1
+    ; Properties
+    set energy infantry-US-energy
+    set frange infantry-US-frange
+    set hit infantry-US-hit
+    set frange infantry-US-frange
+    ; Damage table
+    set infantry-damage infantry-US-infantry-damage
+    set tank-damage infantry-US-tank-damage
+    set artillery-damage infantry-US-artillery-damage
+    set bunker-damage infantry-US-bunker-damage
+    ; Targets
+    set self-target-id-first min-one-of targets [distance myself]
+    set self-target-id-second target ([who] of self-target-id-first + 1)
+	]
+end
+
+to US-DOG-White-Infantries
+  create-infantries Dog-W-inf
+  ask infantries with [energy = 0] [
+    set color blue
+    setxy 200 -30 + random 10
+    set heading 180
+    set size infantry-size
+    set side 1
+    ; Properties
+    set energy infantry-US-energy
+    set frange infantry-US-frange
+    set hit infantry-US-hit
+    set frange infantry-US-frange
+    ; Damage table
+    set infantry-damage infantry-US-infantry-damage
+    set tank-damage infantry-US-tank-damage
+    set artillery-damage infantry-US-artillery-damage
+    set bunker-damage infantry-US-bunker-damage
+    ; Targets
+    set self-target-id-first min-one-of targets [distance myself]
+    set self-target-id-second target ([who] of self-target-id-first + 1)
+	]
+end
+
+to US-DOG-Red-Infantries
+  create-infantries Dog-R-inf
+  ask infantries with [energy = 0] [
+    set color blue
+    setxy 270 -30 + random 10
+    set heading 180
+    set size infantry-size
+    set side 1
+    ; Properties
+    set energy infantry-US-energy
+    set frange infantry-US-frange
+    set hit infantry-US-hit
+    set frange infantry-US-frange
+    ; Damage table
+    set infantry-damage infantry-US-infantry-damage
+    set tank-damage infantry-US-tank-damage
+    set artillery-damage infantry-US-artillery-damage
+    set bunker-damage infantry-US-bunker-damage
+    ; Targets
+    set self-target-id-first min-one-of targets [distance myself]
+    set self-target-id-second target ([who] of self-target-id-first + 1)
+	]
+end
+
+to US-EASY-Infantries
+  create-infantries Easy-inf
+  ask infantries with [energy = 0] [
+    set color blue
+    setxy 390 -30 + random 10
+    set heading 180
+    set size infantry-size
+    set side 1
+    ; Properties
+    set energy infantry-US-energy
+    set frange infantry-US-frange
+    set hit infantry-US-hit
+    set frange infantry-US-frange
+    ; Damage table
+    set infantry-damage infantry-US-infantry-damage
+    set tank-damage infantry-US-tank-damage
+    set artillery-damage infantry-US-artillery-damage
+    set bunker-damage infantry-US-bunker-damage
+    ; Targets
+    set self-target-id-first min-one-of targets [distance myself]
+    set self-target-id-second target ([who] of self-target-id-first + 1)
+	]
+end
+
+to US-FOX-Infantries
+  create-infantries Fox-inf
+  ask infantries with [energy = 0] [
+    set color blue
+    setxy 490 -30 + random 10
+    set heading 180
+    set size infantry-size
+    set side 1
+    ; Properties
+    set energy infantry-US-energy
+    set frange infantry-US-frange
+    set hit infantry-US-hit
+    set frange infantry-US-frange
+    ; Damage table
+    set infantry-damage infantry-US-infantry-damage
+    set tank-damage infantry-US-tank-damage
+    set artillery-damage infantry-US-artillery-damage
+    set bunker-damage infantry-US-bunker-damage
+    ; Targets
+    set self-target-id-first min-one-of targets [distance myself]
+    set self-target-id-second target ([who] of self-target-id-first + 1)
+	]
+end
+
+to US-New-Infantries
+  US-DOG-Green-Infantries
+  US-DOG-White-Infantries
+  US-DOG-Red-Infantries
+  US-EASY-Infantries
+  US-FOX-Infantries
+end
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; MISCELLANEOUS
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-to movie
-  vid:start-recorder
-  vid:record-view ;; show the initial state
-  repeat 500 [
-    go
-    vid:record-view
-  ]
-  vid:save-recording "Normandy.mp4"
-end
+;to movie
+;  vid:start-recorder
+;  vid:record-view ;; show the initial state
+;  repeat 500 [
+;    go
+;    vid:record-view
+;  ]
+;  vid:save-recording "Normandy.mp4"
+;end
 @#$#@#$#@
 GRAPHICS-WINDOW
 421
@@ -1110,7 +1496,7 @@ infantry-GE-energy
 infantry-GE-energy
 1
 100
-50.0
+51.0
 1
 1
 NIL
@@ -1125,7 +1511,7 @@ infantry-GE-frange
 infantry-GE-frange
 1
 50
-7.0
+13.0
 1
 1
 NIL
@@ -1140,7 +1526,7 @@ infantry-GE-hit
 infantry-GE-hit
 0.1
 1
-0.2
+1.0
 0.1
 1
 NIL
@@ -1155,7 +1541,7 @@ infantry-US-energy
 infantry-US-energy
 1
 100
-100.0
+70.0
 1
 1
 NIL
@@ -1170,7 +1556,7 @@ infantry-US-hit
 infantry-US-hit
 0.1
 1
-0.4
+0.7
 0.1
 1
 NIL
@@ -1217,7 +1603,7 @@ Tank-Delay
 Tank-Delay
 0
 700
-18.0
+700.0
 1
 1
 NIL

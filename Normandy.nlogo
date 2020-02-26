@@ -137,8 +137,8 @@ to init-variables
   ; GE Artillery (canons)
   ;; Properties
   set artillery-GE-energy infantry-GE-energy * 35
-  set artillery-GE-hit infantry-GE-hit
-  set artillery-GE-frange infantry-GE-frange * 40
+  set artillery-GE-hit 0.15
+  set artillery-GE-frange 800
   ;; Damage table
   set artillery-GE-infantry-damage 20
   set artillery-GE-tank-damage 10
@@ -168,19 +168,14 @@ to go
   clear-links
   if ticks >= 300 [ stop ]
   if ticks = Tank-Delay [ GE-setup-tank ]
-  ask bunkers [
-    set label round energy
-  ]
-  ask tanks [
-    set label round energy
-  ]
 
+  ask bunkers [ set label round energy ]
+  ask tanks [ set label round energy ]
   timeWave
 
 	US-move
   GE-move
   fight
-;  show-energy
   tick
 end
 
@@ -258,49 +253,51 @@ to fight
   ; Infantry
   ask infantries [
     ; Target bunkers
-    ask bunkers with [(side = 1 - [side] of myself)] [
-      ifelse distance myself <= [frange] of myself [
-        if random 1 < hit [
-          create-link-to myself
-          set energy energy - [bunker-damage] of myself ]
-      ][ ]
+    ask up-to-n-of 2 bunkers with [(side = 1 - [side] of myself)] in-radius frange [
+      if random-float 1.0 < [ hit ] of myself [
+        create-link-to myself
+        set energy energy - [ bunker-damage ] of myself
+      ]
+    ]
+    ; Target tanks
+    ask up-to-n-of 1 tanks with [(side = 1 - [side] of myself)] in-radius frange [
+      if random-float 1.0 < [ hit ] of myself [
+        create-link-to myself
+        set energy energy - [ tank-damage ] of myself
+      ]
     ]
   ]
 
   ; Bunker
   ask bunkers [
     ; Target infantry
-    ask infantries with [(side = 1 - [side] of myself)] [
-      ifelse distance myself <= [frange] of myself [
-        if random 1 < hit [
-          create-link-to myself
-          set energy energy - [infantry-damage] of myself ]
-      ][ ]
+    ask up-to-n-of 10 infantries with [(side = 1 - [side] of myself)] in-radius frange [
+      if random-float 1.0 < [ hit ] of myself  [
+        create-link-to myself
+        set energy energy - [ infantry-damage ] of myself
+      ]
     ]
   ]
 
-  ; Artillery
-  ask artilleries [
+  ; GE Artillery
+  ask artilleries with [(side = 0)] [
     ; Target infantry
-    ask infantries with [(side = 1 - [side] of myself)] [
-      ifelse distance myself <= [frange] of myself [
-        if random 1 < hit [
-          create-link-to myself
-          set energy energy - [infantry-damage] of myself ]
-      ][ ]
+    ask up-to-n-of 10 infantries with [(side = 1 - [side] of myself)] in-radius frange [
+      if random-float 1.0 < [ hit ] of myself and ycor < -80 and ycor > -220 [
+        create-link-to myself
+        set energy energy - [ infantry-damage ] of myself
+      ]
     ]
   ]
-
 
   ; Tank
   ask tanks [
     ; Target infantry
-    ask infantries with [(side = 1 - [side] of myself)] [
-      ifelse distance myself <= [frange] of myself [
-        if random 1 < hit [
-          create-link-to myself
-          set energy energy - [infantry-damage] of myself ]
-      ][ ]
+    ask up-to-n-of 5 infantries with [(side = 1 - [side] of myself)] in-radius frange [
+      if random-float 1.0 < [ hit ] of myself [
+        create-link-to myself
+        set energy energy - [ infantry-damage ] of myself
+      ]
     ]
   ]
 

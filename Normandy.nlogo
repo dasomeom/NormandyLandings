@@ -222,16 +222,18 @@ to GE-move
 
     ifelse can-fire = 0 [
       ; Don't fire and move to target checkpoint
-      ifelse ycor < [ycor] of self-target-id-second [
+      if ycor < [ycor] of self-target-id-second [
         set heading towards self-target-id-second + random 10 * one-of [1 -1]
         forward 1
-      ][
+      ]
+      if (ycor >= [ycor] of self-target-id-second)  and (ycor + 20 < [ycor] of self-target-id-first) [
         set heading towards self-target-id-first
         forward 1
       ]
     ][
       ; Don't move and will fire at enemy
     ]
+
 
   ]
 
@@ -1018,7 +1020,6 @@ to movie
   ]
   vid:save-recording "Normandy.mp4"
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 421

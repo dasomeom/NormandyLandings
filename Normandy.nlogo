@@ -236,14 +236,9 @@ to GE-move
         set heading towards self-target-id-second + random 10 * one-of [1 -1]
         forward 1
       ]
-      if (ycor >= [ycor] of self-target-id-second) and (ycor + 20 < [ycor] of self-target-id-first) [
-        set heading towards self-target-id-first
-        forward 1
-      ]
     ][
       ; Don't move and will fire at enemy
     ]
-
 
   ]
 
@@ -296,6 +291,8 @@ to fight
     ask up-to-n-of 5 infantries with [(side = 1 - [side] of myself)] in-radius frange [
       if random-float 1.0 < [ hit ] of myself [
         create-link-to myself
+        let t self
+        ask myself [ set heading towards t ]
         set energy energy - [ infantry-damage ] of myself
       ]
     ]

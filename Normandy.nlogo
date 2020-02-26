@@ -378,32 +378,6 @@ to US-setup-DOG
   set target-id-second turtlecount
   set turtlecount turtlecount + 1
 
-  ; US Infantry from DOG
-  ; Leave from Warship 1
-;  set number 30
-;  create-infantries number
-;	ask infantries with [energy = 0] [
-;    set color blue
-;    setxy 110 -30 + random 10
-;    set heading 180
-;    set size infantry-size
-;    set side 1
-;    ; Properties
-;    set energy infantry-US-energy
-;    set frange infantry-US-frange
-;    set hit infantry-US-hit
-;    set frange infantry-US-frange
-;    ; Damage table
-;    set infantry-damage infantry-US-infantry-damage
-;    set tank-damage infantry-US-tank-damage
-;    set artillery-damage infantry-US-artillery-damage
-;    set bunker-damage infantry-US-bunker-damage
-;    ; Targets
-;    set self-target-id-first target-id-first
-;    set self-target-id-second target-id-second
-;	]
-;  set turtlecount turtlecount + number
-
   ; Warship 2
   create-artilleries 1
   ask artillery turtlecount [
@@ -452,32 +426,6 @@ to US-setup-DOG
   set target-id-second turtlecount
   set turtlecount turtlecount + 1
 
-  ; US Infantry from DOG
-  ; Leave from Warship 2
-;  set number 30
-;  create-infantries number
-;  ask infantries with [energy = 0] [
-;    set color blue
-;    setxy 180 -30 + random 10
-;    set heading 180
-;    set size infantry-size
-;    set side 1
-;    ; Properties
-;    set energy infantry-US-energy
-;    set frange infantry-US-frange
-;    set hit infantry-US-hit
-;    set frange infantry-US-frange
-;    ; Damage table
-;    set infantry-damage infantry-US-infantry-damage
-;    set tank-damage infantry-US-tank-damage
-;    set artillery-damage infantry-US-artillery-damage
-;    set bunker-damage infantry-US-bunker-damage
-;    ; Targets
-;    set self-target-id-first target-id-first
-;    set self-target-id-second target-id-second
-;	]
-;  set turtlecount turtlecount + number
-
   ; Warship 3
   create-artilleries 1
   ask artillery turtlecount [
@@ -497,32 +445,6 @@ to US-setup-DOG
     set bunker-damage artillery-US-bunker-damage
   ]
   set turtlecount turtlecount + 1
-
-  ; US Infantry from DOG
-  ; Leave from Warship 3
-;  set number 30
-;  create-infantries number
-;  ask infantries with [energy = 0] [
-;    set color blue
-;    setxy 250 -30 + random 10
-;    set heading 180
-;    set size infantry-size
-;    set side 1
-;    ; Properties
-;    set energy infantry-US-energy
-;    set frange infantry-US-frange
-;    set hit infantry-US-hit
-;    set frange infantry-US-frange
-;    ; Damage table
-;    set infantry-damage infantry-US-infantry-damage
-;    set tank-damage infantry-US-tank-damage
-;    set artillery-damage infantry-US-artillery-damage
-;    set bunker-damage infantry-US-bunker-damage
-;    ; Targets
-;    set self-target-id-first target-id-first
-;    set self-target-id-second target-id-second
-;	]
-;  set turtlecount turtlecount + number
 
 end
 
@@ -577,32 +499,6 @@ to US-setup-EASY
   set target-id-second turtlecount
   set turtlecount turtlecount + 1
 
-  ; US Infantry from EASY
-  ; Leave from Warship 1
-;  set number 30
-;  create-infantries number
-;  ask infantries with [energy = 0] [
-;    set color blue
-;    setxy 370 -30 + random 10
-;    set heading 180
-;    set size infantry-size
-;    set side 1
-;    ; Properties
-;    set energy infantry-US-energy
-;    set frange infantry-US-frange
-;    set hit infantry-US-hit
-;    set frange infantry-US-frange
-;    ; Damage table
-;    set infantry-damage infantry-US-infantry-damage
-;    set tank-damage infantry-US-tank-damage
-;    set artillery-damage infantry-US-artillery-damage
-;    set bunker-damage infantry-US-bunker-damage
-;    ; Targets
-;    set self-target-id-first target-id-first
-;    set self-target-id-second target-id-second
-;	]
-;  set turtlecount turtlecount + number
-
 end
 
 to US-setup-FOX
@@ -656,31 +552,6 @@ to US-setup-FOX
   set target-id-second turtlecount
   set turtlecount turtlecount + 1
 
-  ; US Infantry from FOX
-  ; Leave from Warship 1
-;  set number 30
-;  create-infantries number
-;  ask infantries with [energy = 0] [
-;    set color blue
-;    setxy 480 -30 + random 10
-;    set heading 180
-;    set size infantry-size
-;    set side 1
-;    ; Properties
-;    set energy infantry-US-energy
-;    set frange infantry-US-frange
-;    set hit infantry-US-hit
-;    set frange infantry-US-frange
-;    ; Damage table
-;    set infantry-damage infantry-US-infantry-damage
-;    set tank-damage infantry-US-tank-damage
-;    set artillery-damage infantry-US-artillery-damage
-;    set bunker-damage infantry-US-bunker-damage
-;    ; Targets
-;    set self-target-id-first target-id-first
-;    set self-target-id-second target-id-second
-;	]
-;  set turtlecount turtlecount + number
 end
 
 ;;;;;;;;;;;;;;;;;;
@@ -830,7 +701,7 @@ to GE-setup-bunkers
   create-bunkers 1
   ask bunker turtlecount [
     set color red
-    setxy 483 -240
+    setxy 470 -247
     set heading 90
     set size bunkers-size
     set side 0
@@ -1629,7 +1500,7 @@ Tank-Delay
 Tank-Delay
 0
 700
-152.0
+155.0
 1
 1
 NIL

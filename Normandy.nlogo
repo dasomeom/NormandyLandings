@@ -168,279 +168,14 @@ to go
   clear-links
   if ticks >= 300 [ stop ]
   if ticks = Tank-Delay [ GE-setup-tank ]
-
-  if ticks = 1 [
-    set Dog-G-inf  24
-    set Dog-W-inf 12
-    set Dog-R-inf 12
-    set Easy-inf 48
-    set Fox-inf 48
-    US-New-Infantries
-    US-move
-    fight
+  ask bunkers [
+    set label round energy
   ]
-  if ticks = 3 [
-    set Dog-G-inf 38
-    set Dog-W-inf 30
-    set Dog-R-inf 30
-    set Easy-inf 100
-    set Fox-inf 20
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 8 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 30 ;red
-    set Fox-inf 10
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 25 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 40  ; red
-    set Fox-inf 20
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 30 [
-    set Dog-G-inf 34
-    set Dog-W-inf 10
-    set Dog-R-inf 16
-    set Easy-inf 36   ;10 green+ 26 red
-    set Fox-inf 38
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 40 [
-    set Dog-G-inf 38
-    set Dog-W-inf 12
-    set Dog-R-inf 18
-    set Easy-inf 32 ;10G + 22R
-    set Fox-inf 24
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 50 [
-    set Dog-G-inf 24
-    set Dog-W-inf 12
-    set Dog-R-inf 14
-    set Easy-inf 40 ;14G + 26R
-    set Fox-inf 16
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 57 [
-    set Dog-G-inf  8
-    set Dog-W-inf 0
-    set Dog-R-inf 18
-    set Easy-inf 0
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 60 [
-    set Dog-G-inf 20
-    set Dog-W-inf 2
-    set Dog-R-inf 2
-    set Easy-inf 0
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 65 [
-    set Dog-G-inf 28
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 30  ;R
-    set Fox-inf 26
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 70 [
-    set Dog-G-inf  42
-    set Dog-W-inf 20
-    set Dog-R-inf 20
-    set Easy-inf 44  ;20G + 24R
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 80 [
-    set Dog-G-inf  0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 24 ;R
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 90 [
-    set Dog-G-inf  0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 18 ;R
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 95 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 12 ;R
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-
-  ]
-  if ticks = 100 [
-    set Dog-G-inf 0
-    set Dog-W-inf 20
-    set Dog-R-inf 0
-    set Easy-inf 0
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 105 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 20 ;R
-    set Fox-inf 3
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 110 [
-    set Dog-G-inf 10
-    set Dog-W-inf 0
-    set Dog-R-inf 7
-    set Easy-inf 43  ; 13G + 30R
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 120 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 44 ;R
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 130 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 0
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 135 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 0
-    set Fox-inf 8
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 150 [
-    set Dog-G-inf 0
-    set Dog-W-inf 20
-    set Dog-R-inf 0
-    set Easy-inf 0
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 180 [
-    set Dog-G-inf 0
-    set Dog-W-inf 30
-    set Dog-R-inf 0
-    set Easy-inf 32 ; 18R + 4R+ 1 Rhino???
-    set Fox-inf 0  ;2 Rhino??
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 185 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 20 ;R
-    set Fox-inf 10
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 195 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 76 ;R
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 210 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 180 ;R
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 220 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 0
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
-  ]
-  if ticks = 225 [
-    set Dog-G-inf 0
-    set Dog-W-inf 0
-    set Dog-R-inf 0
-    set Easy-inf 0
-    set Fox-inf 0
-    US-New-Infantries
-    US-move
-    fight
+  ask tanks [
+    set label round energy
   ]
 
+  timeWave
 
 	US-move
   GE-move
@@ -1411,10 +1146,280 @@ to US-New-Infantries
   US-FOX-Infantries
 end
 
-;to  show-energy [x] ; places a label on the tanks to show how much energy they have
-;  ask bunkers [if energy >= 0 [ask patch-at 328 -250 [set plabel (word "Engergy:" " " precision [energy] of myself  0 )]]]
-;
-;end
+to timeWave
+  if ticks = 1 [
+    set Dog-G-inf  24
+    set Dog-W-inf 12
+    set Dog-R-inf 12
+    set Easy-inf 48
+    set Fox-inf 48
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 3 [
+    set Dog-G-inf 38
+    set Dog-W-inf 30
+    set Dog-R-inf 30
+    set Easy-inf 100
+    set Fox-inf 20
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 8 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 30 ;red
+    set Fox-inf 10
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 25 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 40  ; red
+    set Fox-inf 20
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 30 [
+    set Dog-G-inf 34
+    set Dog-W-inf 10
+    set Dog-R-inf 16
+    set Easy-inf 36   ;10 green+ 26 red
+    set Fox-inf 38
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 40 [
+    set Dog-G-inf 38
+    set Dog-W-inf 12
+    set Dog-R-inf 18
+    set Easy-inf 32 ;10G + 22R
+    set Fox-inf 24
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 50 [
+    set Dog-G-inf 24
+    set Dog-W-inf 12
+    set Dog-R-inf 14
+    set Easy-inf 40 ;14G + 26R
+    set Fox-inf 16
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 57 [
+    set Dog-G-inf  8
+    set Dog-W-inf 0
+    set Dog-R-inf 18
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 60 [
+    set Dog-G-inf 20
+    set Dog-W-inf 2
+    set Dog-R-inf 2
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 65 [
+    set Dog-G-inf 28
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 30  ;R
+    set Fox-inf 26
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 70 [
+    set Dog-G-inf  42
+    set Dog-W-inf 20
+    set Dog-R-inf 20
+    set Easy-inf 44  ;20G + 24R
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 80 [
+    set Dog-G-inf  0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 24 ;R
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 90 [
+    set Dog-G-inf  0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 18 ;R
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 95 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 12 ;R
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+
+  ]
+  if ticks = 100 [
+    set Dog-G-inf 0
+    set Dog-W-inf 20
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 105 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 20 ;R
+    set Fox-inf 3
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 110 [
+    set Dog-G-inf 10
+    set Dog-W-inf 0
+    set Dog-R-inf 7
+    set Easy-inf 43  ; 13G + 30R
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 120 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 44 ;R
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 130 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 135 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 8
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 150 [
+    set Dog-G-inf 0
+    set Dog-W-inf 20
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 180 [
+    set Dog-G-inf 0
+    set Dog-W-inf 30
+    set Dog-R-inf 0
+    set Easy-inf 32 ; 18R + 4R+ 1 Rhino???
+    set Fox-inf 0  ;2 Rhino??
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 185 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 20 ;R
+    set Fox-inf 10
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 195 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 76 ;R
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 210 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 180 ;R
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 220 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+  if ticks = 225 [
+    set Dog-G-inf 0
+    set Dog-W-inf 0
+    set Dog-R-inf 0
+    set Easy-inf 0
+    set Fox-inf 0
+    US-New-Infantries
+    US-move
+    fight
+  ]
+
+end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;

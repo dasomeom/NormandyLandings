@@ -112,48 +112,48 @@ to init-variables
   ; infantry-US-frange
   ;; Damage table
   set infantry-US-infantry-damage 5
-  set infantry-US-tank-damage 2
-  set infantry-US-artillery-damage 1
-  set infantry-US-bunker-damage 2
+  set infantry-US-tank-damage 40
+  set infantry-US-artillery-damage 20
+  set infantry-US-bunker-damage 3
 
   ; US Artillery (warships)
   ;; Properties
-  set artillery-US-energy infantry-US-energy * 15
+  set artillery-US-energy infantry-US-energy * 10
   set artillery-US-hit infantry-US-hit
-  set artillery-US-frange infantry-US-frange * 16
+  set artillery-US-frange infantry-US-frange * 10
   ;; Damage table
-  set artillery-US-infantry-damage 20
+  set artillery-US-infantry-damage 7
   set artillery-US-tank-damage 10
-  set artillery-US-artillery-damage 5
-  set artillery-US-bunker-damage 10
+  set artillery-US-artillery-damage 1
+  set artillery-US-bunker-damage 1
 
   ; GE Bunkers
   ;; Properties
-  set bunker-GE-energy infantry-GE-energy * 10
-  set bunker-GE-hit infantry-GE-hit * 5
-  set bunker-GE-frange infantry-GE-frange * 5
+  set bunker-GE-energy infantry-GE-energy * 40
+  set bunker-GE-hit infantry-GE-hit * 1
+  set bunker-GE-frange infantry-GE-frange * 2
   ;; Damage table
   set bunker-GE-infantry-damage 5
-  set bunker-GE-tank-damage 2
+  set bunker-GE-tank-damage 1
   set bunker-GE-artillery-damage 1
 
   ; GE Artillery (canons)
   ;; Properties
-  set artillery-GE-energy infantry-GE-energy * 35
-  set artillery-GE-hit 0.1
-  set artillery-GE-frange infantry-GE-frange * 60
+  set artillery-GE-energy infantry-GE-energy * 5
+  set artillery-GE-hit 1
+  set artillery-GE-frange infantry-GE-frange * 25
   ;; Damage table
-  set artillery-GE-infantry-damage 0.5
+  set artillery-GE-infantry-damage 10
   set artillery-GE-tank-damage 0.5
   set artillery-GE-artillery-damage 0.5
 
   ; GE Tanks
   ;; Properties
-  set tank-GE-energy infantry-GE-energy * 50
-  set tank-GE-hit infantry-GE-hit
-  set tank-GE-frange infantry-GE-frange * 3
+  set tank-GE-energy infantry-GE-energy * 40
+  set tank-GE-hit infantry-GE-hit * 4
+  set tank-GE-frange infantry-GE-frange * 10
   ;; Damage table
-  set tank-GE-infantry-damage 30
+  set tank-GE-infantry-damage 40
   set tank-GE-tank-damage 15
   set tank-GE-artillery-damage 10
 end
@@ -422,7 +422,9 @@ to go
 
 	US-move
   GE-move
-  fight
+  if ticks mod 2 = 0 [
+    fight
+  ]
   tick
 end
 
@@ -437,19 +439,23 @@ to US-move
 
   ; US infantry move
   ask infantries with [(side = 1)] [
-
     ; Don't move if can fire at enemy
     ; Check for enemies under fire range
     let can-fire 0
-    ask turtles in-radius frange [
-      if [side] of self - [side] of myself = -1 [ set can-fire 1 ]
-    ]
+
+    ifelse ycor < -200 [
+      ask turtles in-radius frange [
+        if ([side] of self - [side] of myself = -1) [
+          set can-fire 1
+        ]
+      ]
+    ] [ ]
 
     ifelse can-fire = 0 [
       ; Don't fire and move to target checkpoint
       ifelse ycor > [ycor] of self-target-id-first [
         set heading towards self-target-id-first + random 50 * one-of [1 -1]
-        forward 0.5
+        forward 0.7
         if ycor > -200 [
           forward 2
         ]
@@ -458,7 +464,14 @@ to US-move
         forward 1
       ]
     ][
-      ; Don't move and will fire at enemy
+      ; Target bunkers
+      ask bunkers [
+        ifelse distance myself <= [frange] of myself [
+          if random 1 < hit [
+            create-link-to myself [set color sky]
+            set energy energy - [bunker-damage] of myself ]
+        ][ ]
+      ]
     ]
 
   ]
@@ -477,20 +490,39 @@ to GE-move
         set can-fire 1
      ]
     ask turtles in-radius frange [
-      if [side] of self - [side] of myself = -1 [ set can-fire 1 ]
+      if [side] of self - [side] of myself = -1 [
+        set can-fire 1
+        stop
+      ]
     ]
 
     ifelse can-fire = 0 [
       ; Don't fire and move to target checkpoint
       ifelse ycor < [ycor] of self-target-id-second [
         set heading towards self-target-id-second + random 10 * one-of [1 -1]
-        forward 1
+        forward 1.5
       ][
         set heading towards self-target-id-first
         forward 1
       ]
     ][
-      ; Don't move and will fire at enemy
+
+      ; Tank
+      ask tanks [
+        ; Target infantry
+        set temp one-of infantries in-radius frange
+        show temp
+        if temp != nobody [
+          ask infantries [
+            if [distance myself] of temp < 5 and [ycor] of temp < -190 [
+              create-link-to myself [set color red]
+              set energy energy - infantry-damage
+            ]
+
+          ]
+        ]
+      ]
+
     ]
 
   ]
@@ -499,59 +531,50 @@ end
 
 to fight
 
-  ; Infantry
-  ask infantries [
-    ; Target bunkers
-    ask bunkers with [(side = 1 - [side] of myself)] [
-      ifelse distance myself <= [frange] of myself [
-        if random 1 < hit [
-          create-link-to myself
-          set energy energy - [bunker-damage] of myself ]
-      ][ ]
-    ]
-  ]
-
   ; Bunker
   ask bunkers [
     ; Target infantry
-    ask infantries with [(side = 1 - [side] of myself)] [
-      ifelse distance myself <= [frange] of myself [
-        if random 1 < hit [
-          create-link-to myself
-          set energy energy - [infantry-damage] of myself ]
-      ][ ]
+    set temp one-of infantries in-radius frange
+    if temp != nobody [
+      ask infantries [
+        if [distance myself] of temp < 4 and [ycor] of temp < -200 [
+          create-link-to myself [set color gray]
+          set energy energy - infantry-damage
+        ]
+        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random 1 < hit [
+          create-link-to myself [set color gray]
+          set energy energy - (infantry-damage)
+        ]
+
+      ]
     ]
   ]
 
   ; Artillery
   ask artilleries [
     ; Target infantry
-    ask up-to-n-of 10 infantries with [(side = 1 - [side] of myself)] [
-      if distance myself <= random [frange] of myself [
-        if random 1 < [hit] of myself [
-          if remainder ticks 10 > 5 [
-          create-link-to myself
-          set energy energy - [infantry-damage] of myself ]
-    ]
+    set temp one-of infantries in-radius frange with [(side = 1 - [side] of myself)]
+    if temp != nobody [
+      ask infantries [
+        if [distance myself] of temp < 4 and [ycor] of temp < -200 [
+          create-link-to myself [set color orange]
+          set energy energy - infantry-damage
+        ]
+        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random 1 < hit [
+          create-link-to myself [set color orange]
+          set energy energy - (infantry-damage)
+        ]
+
+      ]
     ]
   ]
 
-  ]
-
-; Tank
-  ask tanks [
-    ; Target infantry
-    ask  infantries with [(side = 1 - [side] of myself)] [
-      ifelse distance myself <= [frange] of myself and ycor < -200 [
-        if random 1 < hit [
-          create-link-to myself
-          set energy energy - [infantry-damage] of myself ]
-      ][ ]
-    ]
-  ]
 
   ; Every agent with zero or negative energy dies
-  ask turtles [ if energy < 1 [ die ] ]
+  ask turtles [ if energy < 1 [
+    ;show who
+    die
+  ]]
 end
 
 
@@ -1498,8 +1521,8 @@ SLIDER
 infantry-GE-energy
 infantry-GE-energy
 1
-100
-51.0
+50
+50.0
 1
 1
 NIL
@@ -1512,9 +1535,9 @@ SLIDER
 461
 infantry-GE-frange
 infantry-GE-frange
-1
+20
 50
-31.0
+25.0
 1
 1
 NIL
@@ -1543,8 +1566,8 @@ SLIDER
 infantry-US-energy
 infantry-US-energy
 1
-100
-70.0
+50
+30.0
 1
 1
 NIL
@@ -1559,7 +1582,7 @@ infantry-US-hit
 infantry-US-hit
 0.1
 1
-0.7
+1.0
 0.1
 1
 NIL
@@ -1572,9 +1595,9 @@ SLIDER
 462
 infantry-US-frange
 infantry-US-frange
-1
 50
-20.0
+100
+70.0
 1
 1
 NIL
@@ -1606,7 +1629,7 @@ Tank-Delay
 Tank-Delay
 0
 700
-0.0
+700.0
 1
 1
 NIL

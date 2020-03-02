@@ -151,7 +151,7 @@ to init-variables
   ;; Properties
   set tank-GE-energy infantry-GE-energy * 50
   set tank-GE-hit infantry-GE-hit
-  set tank-GE-frange infantry-GE-frange * .5
+  set tank-GE-frange infantry-GE-frange * 3
   ;; Damage table
   set tank-GE-infantry-damage 30
   set tank-GE-tank-damage 15
@@ -422,7 +422,7 @@ to go
 
 	US-move
   GE-move
-  ;fight
+  fight
   tick
 end
 
@@ -538,11 +538,11 @@ to fight
 
   ]
 
-  ; Tank
+; Tank
   ask tanks [
     ; Target infantry
     ask  infantries with [(side = 1 - [side] of myself)] [
-      ifelse distance myself <= [frange] of myself [
+      ifelse distance myself <= [frange] of myself and ycor < -200 [
         if random 1 < hit [
           create-link-to myself
           set energy energy - [infantry-damage] of myself ]
@@ -1514,7 +1514,7 @@ infantry-GE-frange
 infantry-GE-frange
 1
 50
-13.0
+31.0
 1
 1
 NIL

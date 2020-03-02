@@ -120,7 +120,7 @@ to init-variables
   ;; Properties
   set artillery-US-energy infantry-US-energy * 10
   set artillery-US-hit infantry-US-hit
-  set artillery-US-frange infantry-US-frange * 10
+  set artillery-US-frange infantry-US-frange * 20
   ;; Damage table
   set artillery-US-infantry-damage 7
   set artillery-US-tank-damage 10
@@ -141,7 +141,7 @@ to init-variables
   ;; Properties
   set artillery-GE-energy infantry-GE-energy * 5
   set artillery-GE-hit 1
-  set artillery-GE-frange infantry-GE-frange * 25
+  set artillery-GE-frange infantry-GE-frange * 7
   ;; Damage table
   set artillery-GE-infantry-damage 10
   set artillery-GE-tank-damage 0.5

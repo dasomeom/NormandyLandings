@@ -151,7 +151,7 @@ to init-variables
   ;; Properties
   set tank-GE-energy infantry-GE-energy * 50
   set tank-GE-hit infantry-GE-hit
-  set tank-GE-frange infantry-GE-frange * 10
+  set tank-GE-frange infantry-GE-frange * .5
   ;; Damage table
   set tank-GE-infantry-damage 30
   set tank-GE-tank-damage 15
@@ -422,7 +422,7 @@ to go
 
 	US-move
   GE-move
-  fight
+  ;fight
   tick
 end
 
@@ -449,7 +449,10 @@ to US-move
       ; Don't fire and move to target checkpoint
       ifelse ycor > [ycor] of self-target-id-first [
         set heading towards self-target-id-first + random 50 * one-of [1 -1]
-        forward 1
+        forward 0.5
+        if ycor > -200 [
+          forward 2
+        ]
       ][
         set heading towards self-target-id-second
         forward 1
@@ -1105,8 +1108,8 @@ to GE-setup-artillery
   create-artilleries 1
   ask artilleries with [(side = 0) and (energy = 0)] [
     set color red
-    setxy 690 -340
-    set heading -35
+    setxy 60 -340
+    set heading 0
     set size artillery-size
     set side 0
     ; Properties
@@ -1121,25 +1124,8 @@ to GE-setup-artillery
   create-artilleries 1
   ask artilleries with [(side = 0) and (energy = 0)] [
     set color red
-    setxy 670 -340
-    set heading -35
-    set size artillery-size
-    set side 0
-    ; Properties
-    set energy artillery-GE-energy
-    set hit artillery-GE-hit
-    set frange artillery-GE-frange
-    ; Damage table
-    set infantry-damage artillery-GE-infantry-damage
-    set tank-damage artillery-GE-tank-damage
-    set artillery-damage artillery-GE-artillery-damage
-  ]
-
-  create-artilleries 1
-  ask artilleries with [(side = 0) and (energy = 0)] [
-    set color red
-    setxy 690 -320
-    set heading -35
+    setxy 200 -340
+    set heading 0
     set size artillery-size
     set side 0
     ; Properties
@@ -1155,8 +1141,25 @@ to GE-setup-artillery
   create-artilleries 1
   ask artilleries with [(side = 0) and (energy = 0)] [
     set color red
-    setxy 670 -320
-    set heading -35
+    setxy 390 -340
+    set heading 0
+    set size artillery-size
+    set side 0
+    ; Properties
+    set energy artillery-GE-energy
+    set hit artillery-GE-hit
+    set frange artillery-GE-frange
+    ; Damage table
+    set infantry-damage artillery-GE-infantry-damage
+    set tank-damage artillery-GE-tank-damage
+    set artillery-damage artillery-GE-artillery-damage
+  ]
+
+  create-artilleries 1
+  ask artilleries with [(side = 0) and (energy = 0)] [
+    set color red
+    setxy 550 -340
+    set heading 0
     set size artillery-size
     set side 0
     ; Properties
@@ -1603,7 +1606,7 @@ Tank-Delay
 Tank-Delay
 0
 700
-700.0
+0.0
 1
 1
 NIL

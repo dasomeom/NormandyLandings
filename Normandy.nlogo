@@ -385,6 +385,25 @@ to US-setup-DOG
   ]
   set turtlecount turtlecount + 1
 
+  create-artilleries 1
+  ask artillery turtlecount [
+    set color blue
+    setxy 110 -20
+    set heading 90
+    set size warships-size
+    set side 2
+    ; Properties
+    set energy artillery-US-energy
+    set hit artillery-US-hit
+    set frange artillery-US-frange
+    ; Damage table
+    set infantry-damage artillery-US-infantry-damage
+    set tank-damage artillery-US-tank-damage
+    set artillery-damage artillery-US-artillery-damage
+    set bunker-damage artillery-US-bunker-damage
+  ]
+  set turtlecount turtlecount + 1
+
   ; DOG land target 1
   ; For units from Warship 1
   create-targets 1
@@ -447,6 +466,25 @@ to US-setup-DOG
     set heading 90
     set size warships-size
     set side 1
+    ; Properties
+    set energy artillery-US-energy
+    set hit artillery-US-hit
+    set frange artillery-US-frange
+    ; Damage table
+    set infantry-damage artillery-US-infantry-damage
+    set tank-damage artillery-US-tank-damage
+    set artillery-damage artillery-US-artillery-damage
+    set bunker-damage artillery-US-bunker-damage
+  ]
+  set turtlecount turtlecount + 1
+
+  create-artilleries 1
+  ask artillery turtlecount [
+    set color blue
+    setxy 180 -20
+    set heading 90
+    set size warships-size
+    set side 2
     ; Properties
     set energy artillery-US-energy
     set hit artillery-US-hit
@@ -533,6 +571,25 @@ to US-setup-DOG
   ]
   set turtlecount turtlecount + 1
 
+  create-artilleries 1
+  ask artillery turtlecount [
+    set color blue
+    setxy 250 -20
+    set heading 90
+    set size warships-size
+    set side 2
+    ; Properties
+    set energy artillery-US-energy
+    set hit artillery-US-hit
+    set frange artillery-US-frange
+    ; Damage table
+    set infantry-damage artillery-US-infantry-damage
+    set tank-damage artillery-US-tank-damage
+    set artillery-damage artillery-US-artillery-damage
+    set bunker-damage artillery-US-bunker-damage
+  ]
+  set turtlecount turtlecount + 1
+
   ; US Infantry from DOG
   ; Leave from Warship 3
 ;  set number 30
@@ -572,6 +629,25 @@ to US-setup-EASY
     set heading 90
     set size warships-size
     set side 1
+    ; Properties
+    set energy artillery-US-energy
+    set hit artillery-US-hit
+    set frange artillery-US-frange
+    ; Damage table
+    set infantry-damage artillery-US-infantry-damage
+    set tank-damage artillery-US-tank-damage
+    set artillery-damage artillery-US-artillery-damage
+    set bunker-damage artillery-US-bunker-damage
+  ]
+  set turtlecount turtlecount + 1
+
+  create-artilleries 1
+  ask artillery turtlecount [
+    set color blue
+    setxy 370 -20
+    set heading 90
+    set size warships-size
+    set side 2
     ; Properties
     set energy artillery-US-energy
     set hit artillery-US-hit
@@ -651,6 +727,25 @@ to US-setup-FOX
     set heading 90
     set size warships-size
     set side 1
+    ; Properties
+    set energy artillery-US-energy
+    set hit artillery-US-hit
+    set frange artillery-US-frange
+    ; Damage table
+    set infantry-damage artillery-US-infantry-damage
+    set tank-damage artillery-US-tank-damage
+    set artillery-damage artillery-US-artillery-damage
+    set bunker-damage artillery-US-bunker-damage
+  ]
+  set turtlecount turtlecount + 1
+
+  create-artilleries 1
+  ask artillery turtlecount [
+    set color blue
+    setxy 480 -20
+    set heading 90
+    set size warships-size
+    set side 2
     ; Properties
     set energy artillery-US-energy
     set hit artillery-US-hit
@@ -1528,15 +1623,15 @@ end
 
 
 to US-artillery-move
-  if ticks > 200 [
-    ask artilleries with [side = 1] [
+  if ticks > 100 [
+    ask artilleries with [side = 2] [
      if ycor > -150 [
         set heading 180
         forward 3
         ]
       if ycor <= -150 [
         set heading 90
-        set temp one-of artilleries in-radius frange with [(side = 1 - [side] of myself)]
+        set temp one-of artilleries in-radius frange with [side = 0]
         if temp != nobody [
           ask artilleries [
             if [distance myself] of temp < 4 and [ycor] of temp < -200 [
@@ -1552,6 +1647,7 @@ to US-artillery-move
       ]
     ]
   ]
+
 
 end
 

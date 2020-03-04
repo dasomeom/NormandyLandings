@@ -20,6 +20,8 @@ turtles-own [
 ]
 
 globals [
+  game-over?
+
   turtlecount       ; indices of turtles
   target-id-first
   target-id-second
@@ -95,6 +97,7 @@ globals [
 ]
 
 to init-variables
+  set game-over? false
   set turtlecount 0
 
   ; Sizes
@@ -425,6 +428,12 @@ to go
   if ticks mod 2 = 0 [
     fight
   ]
+
+  if ticks > 60 [
+    win-or-lose
+  ]
+  if game-over? [ stop ]
+
   tick
 end
 
@@ -460,8 +469,17 @@ to US-move
           forward 2
         ]
       ][
-        set heading towards self-target-id-second
-        forward 1
+        ask self-target-id-first [
+          set color blue
+        ]
+        ifelse ycor > [ycor] of self-target-id-second [
+          set heading towards self-target-id-second
+          forward 1
+        ][
+          ask self-target-id-second [
+            set color blue
+          ]
+        ]
       ]
     ][
       ; Target bunkers
@@ -511,7 +529,7 @@ to GE-move
       ask tanks [
         ; Target infantry
         set temp one-of infantries in-radius frange
-        show temp
+        ;show temp
         if temp != nobody [
           ask infantries [
             if [distance myself] of temp < 5 and [ycor] of temp < -190 [
@@ -578,6 +596,16 @@ to fight
 end
 
 
+to win-or-lose
+  if count infantries > 500 and (count targets with [color = blue]) >= 6 [
+    user-message "US WIN"
+    set game-over? true ]
+
+  if count infantries  < 200 [
+    user-message "GE WIN"
+    set game-over? true ]
+end
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; AGENTS AND THEIR INITIAL POSITIONS, PROPERTIES
@@ -629,7 +657,7 @@ to US-setup-DOG
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 93 -233
     set heading 90
     set size targets-size
@@ -643,7 +671,7 @@ to US-setup-DOG
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 103 -270
     set heading 90
     set size targets-size
@@ -703,7 +731,7 @@ to US-setup-DOG
   ; For units from Warship 2
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 240 -250
     set heading 90
     set size targets-size
@@ -717,7 +745,7 @@ to US-setup-DOG
   ; For units from Warship 2
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 246 -285
     set heading 90
     set size targets-size
@@ -828,7 +856,7 @@ to US-setup-EASY
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 338 -250
     set heading 90
     set size targets-size
@@ -842,7 +870,7 @@ to US-setup-EASY
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 340 -273
     set heading 90
     set size targets-size
@@ -907,7 +935,7 @@ to US-setup-FOX
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 450 -250
     set heading 90
     set size targets-size
@@ -921,7 +949,7 @@ to US-setup-FOX
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 453 -290
     set heading 90
     set size targets-size
@@ -1522,7 +1550,7 @@ infantry-GE-energy
 infantry-GE-energy
 1
 50
-50.0
+36.0
 1
 1
 NIL
@@ -1537,7 +1565,7 @@ infantry-GE-frange
 infantry-GE-frange
 20
 50
-25.0
+43.0
 1
 1
 NIL
@@ -1629,7 +1657,7 @@ Tank-Delay
 Tank-Delay
 0
 700
-700.0
+0.0
 1
 1
 NIL

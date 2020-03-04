@@ -115,7 +115,7 @@ to init-variables
   ; infantry-US-frange
   ;; Damage table
   set infantry-US-infantry-damage 5
-  set infantry-US-tank-damage 40
+  set infantry-US-tank-damage 5
   set infantry-US-artillery-damage 20
   set infantry-US-bunker-damage 3
 
@@ -132,7 +132,7 @@ to init-variables
 
   ; GE Bunkers
   ;; Properties
-  set bunker-GE-energy infantry-GE-energy * 40
+  set bunker-GE-energy infantry-GE-energy * 50
   set bunker-GE-hit infantry-GE-hit * 1
   set bunker-GE-frange infantry-GE-frange * 2
   ;; Damage table
@@ -153,7 +153,7 @@ to init-variables
   ; GE Tanks
   ;; Properties
   set tank-GE-energy infantry-GE-energy * 40
-  set tank-GE-hit infantry-GE-hit * 4
+  set tank-GE-hit infantry-GE-hit * 5
   set tank-GE-frange infantry-GE-frange * 10
   ;; Damage table
   set tank-GE-infantry-damage 40
@@ -482,14 +482,39 @@ to US-move
         ]
       ]
     ][
+
+      let bunkers-existing false
       ; Target bunkers
       ask bunkers [
         ifelse distance myself <= [frange] of myself [
-          if random 1 < hit [
+
+          set bunkers-existing true
+          if random-float 1 < 0.2 [
             create-link-to myself [set color sky]
             set energy energy - [bunker-damage] of myself ]
-        ][ ]
+        ][
+
+
+
+
+
+
+        ]
       ]
+
+      if bunkers-existing = false [
+        ; Target bunkers
+        ask tanks [
+          ifelse distance myself <= [frange] of myself [
+            if random-float 1 < 0.2 [
+              create-link-to myself [set color sky]
+              set energy energy - [tank-damage] of myself ]
+          ][ ]
+        ]
+
+
+      ]
+
     ]
 
   ]
@@ -559,7 +584,7 @@ to fight
           create-link-to myself [set color gray]
           set energy energy - infantry-damage
         ]
-        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random 1 < hit [
+        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random-float 1 < 0.2 [
           create-link-to myself [set color gray]
           set energy energy - (infantry-damage)
         ]
@@ -578,7 +603,7 @@ to fight
           create-link-to myself [set color orange]
           set energy energy - infantry-damage
         ]
-        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random 1 < hit [
+        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random-float 1 < 0.2 [
           create-link-to myself [set color orange]
           set energy energy - (infantry-damage)
         ]
@@ -597,7 +622,7 @@ end
 
 
 to win-or-lose
-  if count infantries > 500 and (count targets with [color = blue]) >= 6 [
+  if count infantries > 600 and (count targets with [color = blue]) >= 6 [
     user-message "US WIN"
     set game-over? true ]
 
@@ -1550,7 +1575,7 @@ infantry-GE-energy
 infantry-GE-energy
 1
 50
-36.0
+28.0
 1
 1
 NIL

@@ -6,7 +6,6 @@ breed [artilleries artillery]
 breed [bunkers bunker]
 breed [targets target]
 
-
 turtles-own [
   side                   ; 0 for Germans 1 for Allies
   energy                 ; energy left
@@ -21,6 +20,8 @@ turtles-own [
 ]
 
 globals [
+  game-over?
+
   turtlecount       ; indices of turtles
   target-id-first
   target-id-second
@@ -96,6 +97,7 @@ globals [
 ]
 
 to init-variables
+  set game-over? false
   set turtlecount 0
 
   ; Sizes
@@ -113,7 +115,7 @@ to init-variables
   ; infantry-US-frange
   ;; Damage table
   set infantry-US-infantry-damage 5
-  set infantry-US-tank-damage 40
+  set infantry-US-tank-damage 5
   set infantry-US-artillery-damage 20
   set infantry-US-bunker-damage 3
 
@@ -121,7 +123,7 @@ to init-variables
   ;; Properties
   set artillery-US-energy infantry-US-energy * 10
   set artillery-US-hit infantry-US-hit
-  set artillery-US-frange infantry-US-frange * 10
+  set artillery-US-frange infantry-US-frange * 20
   ;; Damage table
   set artillery-US-infantry-damage 7
   set artillery-US-tank-damage 10
@@ -130,7 +132,7 @@ to init-variables
 
   ; GE Bunkers
   ;; Properties
-  set bunker-GE-energy infantry-GE-energy * 40
+  set bunker-GE-energy infantry-GE-energy * 50
   set bunker-GE-hit infantry-GE-hit * 1
   set bunker-GE-frange infantry-GE-frange * 2
   ;; Damage table
@@ -142,7 +144,7 @@ to init-variables
   ;; Properties
   set artillery-GE-energy infantry-GE-energy * 5
   set artillery-GE-hit 1
-  set artillery-GE-frange infantry-GE-frange * 25
+  set artillery-GE-frange infantry-GE-frange * 7
   ;; Damage table
   set artillery-GE-infantry-damage 10
   set artillery-GE-tank-damage 0.5
@@ -151,7 +153,7 @@ to init-variables
   ; GE Tanks
   ;; Properties
   set tank-GE-energy infantry-GE-energy * 40
-  set tank-GE-hit infantry-GE-hit * 4
+  set tank-GE-hit infantry-GE-hit * 5
   set tank-GE-frange infantry-GE-frange * 10
   ;; Damage table
   set tank-GE-infantry-damage 40
@@ -178,13 +180,22 @@ to go
   ask tanks [	
     set label round energy	
   ]
+
+
   US-artillery-move
   US-Waves
+
 	US-move
   GE-move
   if ticks mod 2 = 0 [
     fight
   ]
+
+  if ticks > 60 [
+    win-or-lose
+  ]
+  if game-over? [ stop ]
+
   tick
 end
 
@@ -220,18 +231,52 @@ to US-move
           forward 2
         ]
       ][
-        set heading towards self-target-id-second
-        forward 1
+        ask self-target-id-first [
+          set color blue
+        ]
+        ifelse ycor > [ycor] of self-target-id-second [
+          set heading towards self-target-id-second
+          forward 1
+        ][
+          ask self-target-id-second [
+            set color blue
+          ]
+        ]
       ]
     ][
+
+      let bunkers-existing false
       ; Target bunkers
       ask bunkers [
         ifelse distance myself <= [frange] of myself [
-          if random 1 < hit [
+
+          set bunkers-existing true
+          if random-float 1 < 0.2 [
             create-link-to myself [set color sky]
             set energy energy - [bunker-damage] of myself ]
-        ][ ]
+        ][
+
+
+
+
+
+
+        ]
       ]
+
+      if bunkers-existing = false [
+        ; Target bunkers
+        ask tanks [
+          ifelse distance myself <= [frange] of myself [
+            if random-float 1 < 0.2 [
+              create-link-to myself [set color sky]
+              set energy energy - [tank-damage] of myself ]
+          ][ ]
+        ]
+
+
+      ]
+
     ]
 
   ]
@@ -271,7 +316,7 @@ to GE-move
       ask tanks [
         ; Target infantry
         set temp one-of infantries in-radius frange
-        show temp
+        ;show temp
         if temp != nobody [
           ask infantries [
             if [distance myself] of temp < 5 and [ycor] of temp < -190 [
@@ -301,7 +346,7 @@ to fight
           create-link-to myself [set color gray]
           set energy energy - infantry-damage
         ]
-        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random 1 < hit [
+        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random-float 1 < 0.2 [
           create-link-to myself [set color gray]
           set energy energy - (infantry-damage)
         ]
@@ -311,7 +356,7 @@ to fight
   ]
 
   ; Artillery
-  ask artilleries with [side = 0] [
+  ask artilleries [
     ; Target infantry
     set temp one-of infantries in-radius frange with [(side = 1 - [side] of myself)]
     if temp != nobody [
@@ -320,7 +365,7 @@ to fight
           create-link-to myself [set color orange]
           set energy energy - infantry-damage
         ]
-        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random 1 < hit [
+        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random-float 1 < 0.2 [
           create-link-to myself [set color orange]
           set energy energy - (infantry-damage)
         ]
@@ -337,6 +382,16 @@ to fight
   ]]
 end
 
+
+to win-or-lose
+  if count infantries > 600 and (count targets with [color = blue]) >= 6 [
+    user-message "US WIN"
+    set game-over? true ]
+
+  if count infantries  < 200 [
+    user-message "GE WIN"
+    set game-over? true ]
+end
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -408,7 +463,7 @@ to US-setup-DOG
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 93 -233
     set heading 90
     set size targets-size
@@ -422,7 +477,7 @@ to US-setup-DOG
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 103 -270
     set heading 90
     set size targets-size
@@ -501,7 +556,7 @@ to US-setup-DOG
   ; For units from Warship 2
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 240 -250
     set heading 90
     set size targets-size
@@ -515,7 +570,7 @@ to US-setup-DOG
   ; For units from Warship 2
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 246 -285
     set heading 90
     set size targets-size
@@ -664,7 +719,7 @@ to US-setup-EASY
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 338 -250
     set heading 90
     set size targets-size
@@ -678,7 +733,7 @@ to US-setup-EASY
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 340 -273
     set heading 90
     set size targets-size
@@ -762,7 +817,7 @@ to US-setup-FOX
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 450 -250
     set heading 90
     set size targets-size
@@ -776,7 +831,7 @@ to US-setup-FOX
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color green
+    set color brown
     setxy 453 -290
     set heading 90
     set size targets-size
@@ -1650,7 +1705,6 @@ to US-artillery-move
 
 
 end
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;

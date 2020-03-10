@@ -154,7 +154,7 @@ to init-variables
   ;; Properties
   set tank-GE-energy infantry-GE-energy * 40
   set tank-GE-hit infantry-GE-hit * 5
-  set tank-GE-frange infantry-GE-frange * 10
+  set tank-GE-frange infantry-GE-frange * 3
   ;; Damage table
   set tank-GE-infantry-damage 40
   set tank-GE-tank-damage 15

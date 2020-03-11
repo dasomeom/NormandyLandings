@@ -23,6 +23,7 @@ turtles-own [
 globals [
   game-over?
   winner
+  number-dead
 
   turtlecount       ; indices of turtles
   target-id-first
@@ -101,6 +102,7 @@ globals [
 to init-variables
   set game-over? false
   set winner -1
+  set number-dead 0
   set turtlecount 0
 
   ; Sizes
@@ -377,6 +379,11 @@ to fight
     ]
   ]
 
+  ; Count US infantry deads
+  ask infantries [if energy < 1 [
+    set number-dead number-dead + 1
+    ]
+  ]
 
   ; Every agent with zero or negative energy dies
   ask turtles [ if energy < 1 [
@@ -1718,7 +1725,7 @@ end
 
 
 to US-artillery-move
-  if ticks > 100 [
+  if ticks > 200 [
     ask artilleries with [side = 2] [
      if ycor > -150 [
         set heading 180
@@ -2396,7 +2403,7 @@ NetLogo 6.1.1
   <experiment name="casualties" repetitions="5" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
-    <metric>count infantries with [ side = 1 ]</metric>
+    <metric>number-dead</metric>
     <metric>winner</metric>
     <steppedValueSet variable="Arrival-Time" first="0" step="50" last="700"/>
     <enumeratedValueSet variable="infantry-US-energy">

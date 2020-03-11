@@ -408,7 +408,7 @@ to win-or-lose
     set game-over? true ]
 
   ; Check if 400 ticks OR less 200 US troops
-  if ticks > 400 or count infantries with [side = 1] < 200 [
+  if ticks > 400 and count infantries with [side = 1] < 200 [
     user-message "GE WIN"
     set winner 0
     set game-over? true ]
@@ -1880,7 +1880,7 @@ infantry-GE-hit
 infantry-GE-hit
 0.1
 1
-1.0
+0.6
 0.1
 1
 NIL
@@ -1910,7 +1910,7 @@ infantry-US-hit
 infantry-US-hit
 0.1
 1
-1.0
+0.6
 0.1
 1
 NIL
@@ -1923,9 +1923,9 @@ SLIDER
 462
 infantry-US-frange
 infantry-US-frange
-50
+0
 100
-70.0
+45.0
 1
 1
 NIL
@@ -1957,7 +1957,7 @@ Arrival-Time
 Arrival-Time
 0
 700
-650.0
+400.0
 1
 1
 NIL

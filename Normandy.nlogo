@@ -22,6 +22,7 @@ turtles-own [
 
 globals [
   game-over?
+  winner
 
   turtlecount       ; indices of turtles
   target-id-first
@@ -99,6 +100,7 @@ globals [
 
 to init-variables
   set game-over? false
+  set winner -1
   set turtlecount 0
 
   ; Sizes
@@ -163,7 +165,7 @@ to init-variables
 end
 
 to setup
-  random-seed 1994
+  ;random-seed 1994
   clear-all
   reset-ticks
   import-pcolors "bg/realistic_clean.jpg"
@@ -173,6 +175,7 @@ end
 
 to go
   clear-links
+  if game-over? [ stop ]
   if ticks >= 700 [ stop ]
   if ticks = Arrival-Time [ GE-setup-tank ]
   ask bunkers [	
@@ -195,7 +198,6 @@ to go
   if ticks > 60 [
     win-or-lose
   ]
-  if game-over? [ stop ]
 
   tick
 end
@@ -402,11 +404,13 @@ to win-or-lose
   ; Check if US has taken over more than 2 checkpoints out of 4
   if count_global >= 2 [
     user-message "US WIN"
+    set winner 1
     set game-over? true ]
 
   ; Check if 400 ticks OR less 200 US troops
   if ticks > 400 or count infantries with [side = 1] < 200 [
     user-message "GE WIN"
+    set winner 0
     set game-over? true ]
 end
 
@@ -1835,8 +1839,7 @@ true
 true
 "" ""
 PENS
-"US troops" 1.0 0 -13791810 true "" "plot count turtles with [side = 1]"
-"GE troops" 1.0 0 -2674135 true "" "plot count turtles with [side = 0]"
+"US troops" 1.0 0 -13791810 true "" "plot count infantries with [side = 1]"
 
 SLIDER
 23
@@ -1954,7 +1957,7 @@ Arrival-Time
 Arrival-Time
 0
 700
-0.0
+650.0
 1
 1
 NIL
@@ -2389,6 +2392,56 @@ NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="casualties-sylvain" repetitions="5" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>count infantries with [side = 1]</metric>
+    <steppedValueSet variable="Arrival-Time" first="0" step="50" last="700"/>
+    <enumeratedValueSet variable="infantry-US-energy">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="infantry-GE-energy">
+      <value value="28"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="infantry-US-frange">
+      <value value="70"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="infantry-US-hit">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="infantry-GE-hit">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="infantry-GE-frange">
+      <value value="43"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="victories" repetitions="5" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>winner</metric>
+    <steppedValueSet variable="Arrival-Time" first="0" step="50" last="700"/>
+    <enumeratedValueSet variable="infantry-US-energy">
+      <value value="30"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="infantry-GE-energy">
+      <value value="28"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="infantry-US-frange">
+      <value value="70"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="infantry-US-hit">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="infantry-GE-hit">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="infantry-GE-frange">
+      <value value="43"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default

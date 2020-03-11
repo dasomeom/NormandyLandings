@@ -3,3 +3,7 @@
 .DS_Store
 *.tmp.nlogo
 *.mp4
+.idea
+.pytest_cache
+*.pyc
+.cache

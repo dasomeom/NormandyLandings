@@ -174,7 +174,7 @@ end
 to go
   clear-links
   if ticks >= 700 [ stop ]
-  if ticks = Tank-Delay [ GE-setup-tank ]
+  if ticks = Arrival-Time [ GE-setup-tank ]
   ask bunkers [	
     set label round energy	
   ]	
@@ -1950,8 +1950,8 @@ SLIDER
 518
 193
 551
-Tank-Delay
-Tank-Delay
+Arrival-Time
+Arrival-Time
 0
 700
 0.0

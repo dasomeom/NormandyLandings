@@ -157,7 +157,7 @@ to go
     stop
     output-print number-dead
   ]	
-  if ticks = Tank-Arrival [ GE-setup-tank ]	
+  if ticks = Arrival-Time [ GE-setup-tank ]	
   ask bunkers [		
     set label round energy		
   ]		
@@ -1803,8 +1803,8 @@ SLIDER
 518
 193
 551
-Tank-Arrival
-Tank-Arrival
+Arrival-Time
+Arrival-Time
 0
 700
 400.0

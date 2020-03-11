@@ -1957,7 +1957,7 @@ Arrival-Time
 Arrival-Time
 0
 700
-400.0
+0.0
 1
 1
 NIL
@@ -2393,33 +2393,10 @@ NetLogo 6.1.1
 @#$#@#$#@
 @#$#@#$#@
 <experiments>
-  <experiment name="casualties-sylvain" repetitions="5" runMetricsEveryStep="true">
+  <experiment name="casualties" repetitions="5" runMetricsEveryStep="true">
     <setup>setup</setup>
     <go>go</go>
-    <metric>count infantries with [side = 1]</metric>
-    <steppedValueSet variable="Arrival-Time" first="0" step="50" last="700"/>
-    <enumeratedValueSet variable="infantry-US-energy">
-      <value value="30"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="infantry-GE-energy">
-      <value value="28"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="infantry-US-frange">
-      <value value="70"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="infantry-US-hit">
-      <value value="1"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="infantry-GE-hit">
-      <value value="1"/>
-    </enumeratedValueSet>
-    <enumeratedValueSet variable="infantry-GE-frange">
-      <value value="43"/>
-    </enumeratedValueSet>
-  </experiment>
-  <experiment name="victories" repetitions="5" runMetricsEveryStep="true">
-    <setup>setup</setup>
-    <go>go</go>
+    <metric>count infantries with [ side = 1 ]</metric>
     <metric>winner</metric>
     <steppedValueSet variable="Arrival-Time" first="0" step="50" last="700"/>
     <enumeratedValueSet variable="infantry-US-energy">
@@ -2429,13 +2406,13 @@ NetLogo 6.1.1
       <value value="28"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="infantry-US-frange">
-      <value value="70"/>
+      <value value="45"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="infantry-US-hit">
-      <value value="1"/>
+      <value value="0.6"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="infantry-GE-hit">
-      <value value="1"/>
+      <value value="0.6"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="infantry-GE-frange">
       <value value="43"/>

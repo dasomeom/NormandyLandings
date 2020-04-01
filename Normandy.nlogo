@@ -108,7 +108,7 @@ to init-variables
   set warships-size 25
   set infantry-size 2
   set bunkers-size 10
-  set targets-size 10
+  set targets-size 12
   set artillery-size 13
   set tank-size 20
 
@@ -236,14 +236,14 @@ to US-move
         ]
       ][
         ask self-target-id-first [
-          set color pink
+          set color blue
         ]
         ifelse ycor > [ycor] of self-target-id-second [
           set heading towards self-target-id-second
           forward 1
         ][
           ask self-target-id-second [
-            set color pink
+            set color blue
           ]
         ]
       ]
@@ -402,7 +402,7 @@ to win-or-lose
   foreach [1 2 3 4][ x ->
     let count_checkpoint 0
     ask targets with [id = x] [
-      if color = pink [ set count_checkpoint count_checkpoint + 1 ]
+      if color = blue [ set count_checkpoint count_checkpoint + 1 ]
     ]
     if count_checkpoint = 2 [ set count_global count_global + 1 ]
   ]
@@ -502,7 +502,7 @@ to US-setup-DOG
   create-targets 1
   ask target turtlecount [
     set shape "arrow"
-    set color brown
+    set color red
     setxy 93 -233
     set heading 175
     set size targets-size
@@ -517,7 +517,7 @@ to US-setup-DOG
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color brown
+    set color red
     setxy 106 -270
     set heading 90
     set size targets-size * 1.2
@@ -598,7 +598,7 @@ to US-setup-DOG
   create-targets 1
   ask target turtlecount [
     set shape "arrow"
-    set color brown
+    set color red
     setxy 240 -250
     set heading 180
     set size targets-size
@@ -613,7 +613,7 @@ to US-setup-DOG
   ; For units from Warship 2
   create-targets 1
   ask target turtlecount [
-    set color brown
+    set color red
     setxy 249 -285
     set heading 90
     set size targets-size * 1.2
@@ -764,7 +764,7 @@ to US-setup-EASY
   create-targets 1
   ask target turtlecount [
     set shape "arrow"
-    set color brown
+    set color red
     setxy 338 -250
     set heading 190
     set size targets-size
@@ -779,7 +779,7 @@ to US-setup-EASY
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color brown
+    set color red
     setxy 343 -273
     set heading 90
     set size targets-size * 1.2
@@ -865,7 +865,7 @@ to US-setup-FOX
   create-targets 1
   ask target turtlecount [
     set shape "arrow"
-    set color brown
+    set color red
     setxy 450 -250
     set heading 180
     set size targets-size
@@ -880,7 +880,7 @@ to US-setup-FOX
   ; For units from Warship 1
   create-targets 1
   ask target turtlecount [
-    set color brown
+    set color red
     setxy 455 -290
     set heading 90
     set size targets-size * 1.2
@@ -1860,7 +1860,7 @@ infantry-GE-energy
 infantry-GE-energy
 1
 50
-21.0
+1.0
 1
 1
 NIL
@@ -1875,7 +1875,7 @@ infantry-GE-frange
 infantry-GE-frange
 20
 50
-32.0
+20.0
 1
 1
 NIL
@@ -1890,7 +1890,7 @@ infantry-GE-hit
 infantry-GE-hit
 0.1
 1
-0.4
+0.1
 0.1
 1
 NIL

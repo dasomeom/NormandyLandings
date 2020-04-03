@@ -1,4 +1,3 @@
-
 ;extensions [vid nw]
 
 breed [tanks tank]
@@ -369,10 +368,10 @@ to fight
           create-link-to myself [set color orange]
           set energy energy - infantry-damage
         ]
-        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random-float 1 < 0.2 [
-          create-link-to myself [set color orange]
-          set energy energy - (infantry-damage)
-        ]
+;        if [distance myself] of temp < 4 and [ycor] of temp > -200 and random-float 1 < 0.2 [
+;          create-link-to myself [set color orange]
+;          set energy energy - (infantry-damage)
+;        ]
 
       ]
     ]

@@ -259,7 +259,7 @@ to US-move
       ]
 
       if bunkers-existing = false [
-        ; Target bunkers
+        ; Target tanks
         ask tanks [
           ifelse distance myself <= [frange] of myself [
             if random-float 1 < 0.2 [
@@ -276,6 +276,37 @@ to US-move
   ]
 
 end
+
+
+to US-artillery-move
+  if ticks > 200 [
+    ask artilleries with [side = 2] [
+     if ycor > -150 [
+        set heading 180
+        forward 3
+        ]
+      if ycor <= -150 [
+        set heading 90
+        set temp one-of artilleries in-radius frange with [side = 0]
+        if temp != nobody [
+          ask artilleries [
+            if [distance myself] of temp < 4 and [ycor] of temp < -200 [
+              create-link-to myself [set color violet - 3]
+              set energy energy - infantry-damage
+            ]
+            if [distance myself] of temp < 4 and [ycor] of temp > -200 and random 1 < hit [
+              create-link-to myself [set color violet - 3]
+              set energy energy - (artillery-damage)
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+
+
+end
+
 
 to GE-move
 
@@ -328,6 +359,7 @@ to GE-move
 
 end
 
+
 to fight
 
   ; Bunker
@@ -337,11 +369,11 @@ to fight
     if temp != nobody [
       ask infantries [
         if [distance myself] of temp < 4 and [ycor] of temp < -200 [
-          create-link-to myself [set color lime]
+          create-link-to myself [set color brown]
           set energy energy - infantry-damage
         ]
         if [distance myself] of temp < 4 and [ycor] of temp > -200 and random-float 1 < 0.2 [
-          create-link-to myself [set color lime]
+          create-link-to myself [set color brown]
           set energy energy - (infantry-damage)
         ]
 
@@ -375,6 +407,7 @@ to fight
     die
   ]]
 end
+
 
 to win-or-lose
   ; New victory rules as of 03/11
@@ -449,7 +482,7 @@ to US-setup-DOG
   ; Warship 1
   create-artilleries 1
   ask artillery turtlecount [
-    set color blue
+    set color violet - 3
     setxy 110 -20
     set heading 90
     set size warships-size
@@ -468,7 +501,7 @@ to US-setup-DOG
 
   create-artilleries 1
   ask artillery turtlecount [
-    set color blue
+    set color violet - 3
     setxy 110 -20
     set heading 90
     set size warships-size
@@ -519,7 +552,7 @@ to US-setup-DOG
   ; Warship 2
   create-artilleries 1
   ask artillery turtlecount [
-    set color blue
+    set color violet - 3
     setxy 180 -20
     set heading 90
     set size warships-size
@@ -538,7 +571,7 @@ to US-setup-DOG
 
   create-artilleries 1
   ask artillery turtlecount [
-    set color blue
+    set color violet - 3
     setxy 180 -20
     set heading 90
     set size warships-size
@@ -589,7 +622,7 @@ to US-setup-DOG
   ; Warship 3
   create-artilleries 1
   ask artillery turtlecount [
-    set color blue
+    set color violet - 3
     setxy 250 -20
     set heading 90
     set size warships-size
@@ -608,7 +641,7 @@ to US-setup-DOG
 
   create-artilleries 1
   ask artillery turtlecount [
-    set color blue
+    set color violet - 3
     setxy 250 -20
     set heading 90
     set size warships-size
@@ -633,7 +666,7 @@ to US-setup-EASY
   ; Warhsip 1
   create-artilleries 1
   ask artillery turtlecount [
-    set color blue
+    set color violet - 3
     setxy 370 -20
     set heading 90
     set size warships-size
@@ -652,7 +685,7 @@ to US-setup-EASY
 
   create-artilleries 1
   ask artillery turtlecount [
-    set color blue
+    set color violet - 3
     setxy 370 -20
     set heading 90
     set size warships-size
@@ -708,7 +741,7 @@ to US-setup-FOX
   ; Warhsip 1
   create-artilleries 1
   ask artillery turtlecount [
-    set color blue
+    set color violet - 3
     setxy 480 -20
     set heading 90
     set size warships-size
@@ -727,7 +760,7 @@ to US-setup-FOX
 
   create-artilleries 1
   ask artillery turtlecount [
-    set color blue
+    set color violet - 3
     setxy 480 -20
     set heading 90
     set size warships-size
@@ -793,7 +826,7 @@ to GE-setup-bunkers
   ; Vierville
   create-bunkers 1
   ask bunker turtlecount [
-    set color red
+    set color brown
     setxy 80 -229
     set heading 90
     set size bunkers-size
@@ -811,7 +844,7 @@ to GE-setup-bunkers
 
   create-bunkers 1
   ask bunker turtlecount [
-    set color red
+    set color brown
     setxy 105 -235
     set heading 90
     set size bunkers-size
@@ -830,7 +863,7 @@ to GE-setup-bunkers
   ; Les moulins
   create-bunkers 1
   ask bunker turtlecount [
-    set color red
+    set color brown
     setxy 229 -250
     set heading 90
     set size bunkers-size
@@ -848,7 +881,7 @@ to GE-setup-bunkers
 
   create-bunkers 1
   ask bunker turtlecount [
-    set color red
+    set color brown
     setxy 250 -250
     set heading 90
     set size bunkers-size
@@ -867,7 +900,7 @@ to GE-setup-bunkers
   ; Saint Laurent
   create-bunkers 1
   ask bunker turtlecount [
-    set color red
+    set color brown
     setxy 328 -250
     set heading 90
     set size bunkers-size
@@ -885,7 +918,7 @@ to GE-setup-bunkers
 
   create-bunkers 1
   ask bunker turtlecount [
-    set color red
+    set color brown
     setxy 348 -250
     set heading 90
     set size bunkers-size
@@ -904,7 +937,7 @@ to GE-setup-bunkers
   ; Colleville
   create-bunkers 1
   ask bunker turtlecount [
-    set color red
+    set color brown
     setxy 430 -248
     set heading 90
     set size bunkers-size
@@ -922,7 +955,7 @@ to GE-setup-bunkers
 
   create-bunkers 1
   ask bunker turtlecount [
-    set color red
+    set color brown
     setxy 483 -240
     set heading 90
     set size bunkers-size
@@ -948,7 +981,7 @@ to GE-setup-artillery
 
   create-artilleries 1
   ask artilleries with [(side = 0) and (energy = 0)] [
-    set color red
+    set color orange
     setxy 60 -340
     set heading 0
     set size artillery-size
@@ -964,7 +997,7 @@ to GE-setup-artillery
   ]
   create-artilleries 1
   ask artilleries with [(side = 0) and (energy = 0)] [
-    set color red
+    set color orange
     setxy 200 -340
     set heading 0
     set size artillery-size
@@ -981,7 +1014,7 @@ to GE-setup-artillery
 
   create-artilleries 1
   ask artilleries with [(side = 0) and (energy = 0)] [
-    set color red
+    set color orange
     setxy 390 -340
     set heading 0
     set size artillery-size
@@ -998,7 +1031,7 @@ to GE-setup-artillery
 
   create-artilleries 1
   ask artilleries with [(side = 0) and (energy = 0)] [
-    set color red
+    set color orange
     setxy 550 -340
     set heading 0
     set size artillery-size
@@ -1581,36 +1614,6 @@ to US-Waves
     set Fox-inf 2
     US-New-Infantries
   ]
-
-end
-
-
-to US-artillery-move
-  if ticks > 200 [
-    ask artilleries with [side = 2] [
-     if ycor > -150 [
-        set heading 180
-        forward 3
-        ]
-      if ycor <= -150 [
-        set heading 90
-        set temp one-of artilleries in-radius frange with [side = 0]
-        if temp != nobody [
-          ask artilleries [
-            if [distance myself] of temp < 4 and [ycor] of temp < -200 [
-              create-link-to myself [set color blue]
-              set energy energy - infantry-damage
-            ]
-            if [distance myself] of temp < 4 and [ycor] of temp > -200 and random 1 < hit [
-              create-link-to myself [set color blue]
-              set energy energy - (artillery-damage)
-            ]
-          ]
-        ]
-      ]
-    ]
-  ]
-
 
 end
 @#$#@#$#@

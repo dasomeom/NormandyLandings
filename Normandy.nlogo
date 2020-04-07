@@ -1705,7 +1705,7 @@ infantry-GE-energy
 infantry-GE-energy
 1
 50
-1.0
+28.0
 1
 1
 NIL
@@ -1720,7 +1720,7 @@ infantry-GE-frange
 infantry-GE-frange
 20
 50
-20.0
+43.0
 1
 1
 NIL
@@ -1735,7 +1735,7 @@ infantry-GE-hit
 infantry-GE-hit
 0.1
 1
-0.1
+0.6
 0.1
 1
 NIL
